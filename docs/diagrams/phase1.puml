@@ -1,0 +1,41 @@
+@startuml phase1
+!theme plain
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 13
+skinparam roundCorner 12
+skinparam shadowing false
+skinparam ArrowColor #555555
+skinparam ArrowFontSize 11
+skinparam rectangle {
+  BorderColor #4F86B8
+  BackgroundColor #D6E8F7
+}
+skinparam database {
+  BorderColor #6E9F4A
+  BackgroundColor #E4EFDB
+}
+skinparam actor {
+  BorderColor #D97A55
+  BackgroundColor #F9E4D9
+}
+skinparam package {
+  BorderColor #888888
+  BorderStyle dashed
+  BackgroundColor #FAFAFA
+}
+left to right direction
+
+actor "Client\n(end user)" as client
+actor "Developer client" as dev
+
+package "Logical server  (one hostname:port)" {
+  rectangle "<b>Word-count service</b>  (RPyC)\n----\n<i>Client API</i>\nget_count(keyword, reference) → int | Error\nlist_references(name_query?) → list[str]\n----\n<i>Developer API</i>\nupload_text(reference, text)\nlist_references(name_query?) → list[str]\nget_text(reference) → str\nhot_keywords(n) → list[(keyword, count)]" as wc
+  database "<b>Cache</b>  (Redis)\n(reference, keyword) → count\nhot_keywords sorted set" as redis
+  database "<b>File store</b>  (S3-like)\nGET /texts/{ref} → text | 404\nPUT /texts/{ref}\nGET /texts?q=" as fs
+}
+
+client -[#C0392B,dashed]-> wc : C1  RPC (RPyC) / TCP\nsync request-reply
+dev -[#C0392B,dashed]-> wc : C4  RPC (RPyC) / TCP\nsame port
+wc --> redis : C2  RESP / TCP\nsync request-reply
+wc --> fs : C3  HTTP/1.1 / TCP\nsync GET-by-key
+@enduml

@@ -1,0 +1,72 @@
+direction: right
+vars: {
+  d2-config: {
+    theme-id: 0
+    pad: 24
+  }
+}
+
+classes: {
+  actor: {
+    style: {
+      fill: "#F9E4D9"
+      stroke: "#D97A55"
+      border-radius: 10
+      font-size: 16
+    }
+  }
+  svc: {
+    style: {
+      fill: "#D6E8F7"
+      stroke: "#4F86B8"
+      border-radius: 10
+      font-size: 15
+    }
+  }
+  store: {
+    shape: cylinder
+    style: {
+      fill: "#E4EFDB"
+      stroke: "#6E9F4A"
+      font-size: 15
+    }
+  }
+  rpc: {
+    style: {
+      stroke: "#C0392B"
+      stroke-dash: 5
+      font-size: 13
+    }
+  }
+  int: {
+    style: {
+      stroke: "#555555"
+      font-size: 13
+    }
+  }
+}
+
+client: "Client\nend-user program" { class: actor }
+dev: "Developer client\nupload texts, inspect usage" { class: actor }
+
+server: "Logical server  (one hostname:port)" {
+  style: {
+    stroke: "#888888"
+    stroke-dash: 4
+    fill: "#FAFAFA"
+    font-size: 15
+    border-radius: 12
+  }
+
+  wc: "Word-count service  (RPyC)\n\nClient API\nget_count(keyword, reference) → int | Error\nlist_references(name_query?) → list[str]\n\nDeveloper API\nupload_text(reference, text)\nlist_references(name_query?) → list[str]\nget_text(reference) → str\nhot_keywords(n) → list[(keyword, count)]" { class: svc }
+
+  redis: "Cache  (Redis)\n(reference, keyword) → count\nhot_keywords sorted set" { class: store }
+
+  fs: "File store  (S3-like)\nGET /texts/{ref} → text | 404\nPUT /texts/{ref}\nGET /texts?q=" { class: store }
+
+  wc -> redis: "C2  RESP / TCP\nsync request-reply" { class: int }
+  wc -> fs: "C3  HTTP/1.1 / TCP\nsync GET-by-key" { class: int }
+}
+
+client -> server.wc: "C1  RPC (RPyC) / TCP\nsync request-reply" { class: rpc }
+dev -> server.wc: "C4  RPC (RPyC) / TCP\nsame port" { class: rpc }

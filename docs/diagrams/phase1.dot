@@ -1,0 +1,30 @@
+digraph phase1 {
+  rankdir=LR; splines=true; nodesep=0.6; ranksep=1.1; pad=0.3;
+  fontname="Helvetica"; node [fontname="Helvetica", fontsize=12, shape=box, style="rounded,filled"];
+  edge [fontname="Helvetica", fontsize=10, color="#555555"];
+
+  client [label=<<b>Client</b><br/>end-user program>, fillcolor="#F9E4D9", color="#D97A55"];
+  dev    [label=<<b>Developer client</b><br/>upload texts, inspect usage>, fillcolor="#F9E4D9", color="#D97A55"];
+
+  subgraph cluster_server {
+    label="Logical server  (one hostname:port)"; style="rounded,dashed,filled"; fillcolor="#FAFAFA"; color="#888888"; fontsize=13;
+    wc [fillcolor="#D6E8F7", color="#4F86B8", label=<
+      <table border="0" cellborder="0" cellspacing="2">
+        <tr><td><b>Word-count service</b>  (RPyC)</td></tr>
+        <tr><td><i>Client API</i></td></tr>
+        <tr><td align="left">get_count(keyword, reference) → int | Error</td></tr>
+        <tr><td align="left">list_references(name_query?) → list[str]</td></tr>
+        <tr><td><i>Developer API</i></td></tr>
+        <tr><td align="left">upload_text(reference, text)</td></tr>
+        <tr><td align="left">list_references(name_query?) → list[str]</td></tr>
+        <tr><td align="left">get_text(reference) → str</td></tr>
+        <tr><td align="left">hot_keywords(n) → list[(keyword, count)]</td></tr>
+      </table>>];
+    redis [shape=cylinder, fillcolor="#E4EFDB", color="#6E9F4A", label=<<b>Cache</b>  (Redis)<br/>(reference, keyword) → count<br/>hot_keywords sorted set>];
+    fs    [shape=cylinder, fillcolor="#E4EFDB", color="#6E9F4A", label=<<b>File store</b>  (S3-like)<br/>GET /texts/{ref} → text | 404<br/>PUT /texts/{ref}<br/>GET /texts?q=>];
+    wc -> redis [label="C2  RESP / TCP\nsync request-reply"];
+    wc -> fs    [label="C3  HTTP/1.1 / TCP\nsync GET-by-key"];
+  }
+  client -> wc [label="C1  RPC (RPyC) / TCP\nsync request-reply", color="#C0392B", style=dashed];
+  dev    -> wc [label="C4  RPC (RPyC) / TCP\nsame port", color="#C0392B", style=dashed];
+}

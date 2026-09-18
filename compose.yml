@@ -1,0 +1,54 @@
+# Scenario 1: one word-count server behind localhost:${SERVER_PORT}.
+name: ads
+
+services:
+
+  redis:
+    image: redis:7
+    container_name: ads-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: ads-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "19001:9001"          # web console, for inspection only
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  server-1:
+    build: ./server
+    image: ads-server
+    container_name: server-1
+    environment:
+      SERVER_NAME: server-1
+      SERVER_PORT: ${SERVER_PORT}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      REDIS_URL: redis://redis:6379/0
+      CACHE_MODE: ${CACHE_MODE:-both}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+
+volumes:
+  minio-data:

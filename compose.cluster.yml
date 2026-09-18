@@ -1,0 +1,86 @@
+# Scenario 2 (Phase 3+): three word-count servers behind a load balancer on localhost:${SERVER_PORT}.
+# Self-contained: never combined with compose.yml. `make down` before switching scenarios.
+name: ads
+
+x-server: &server            # one definition, three replicas; only SERVER_NAME differs
+  build: ./server
+  image: ads-server
+  environment: &server-env
+    SERVER_PORT: ${SERVER_PORT}
+    MINIO_ENDPOINT: http://minio:9000
+    MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+    MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    MINIO_BUCKET: ${MINIO_BUCKET}
+    REDIS_URL: redis://redis:6379/0
+    CACHE_MODE: ${CACHE_MODE:-both}
+  depends_on:
+    redis:
+      condition: service_healthy
+    minio:
+      condition: service_healthy
+
+services:
+
+  redis:
+    image: redis:7
+    container_name: ads-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: ads-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "19001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  server-1:
+    <<: *server
+    container_name: server-1
+    environment:
+      <<: *server-env
+      SERVER_NAME: server-1
+
+  server-2:
+    <<: *server
+    container_name: server-2
+    environment:
+      <<: *server-env
+      SERVER_NAME: server-2
+
+  server-3:
+    <<: *server
+    container_name: server-3
+    environment:
+      <<: *server-env
+      SERVER_NAME: server-3
+
+  lb:                        # Phase 3: byte-level TCP proxy, contents of lb/ by its implementer
+    build: ./lb
+    image: ads-lb
+    container_name: lb
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      BACKENDS: server-1:${SERVER_PORT},server-2:${SERVER_PORT},server-3:${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      - server-1
+      - server-2
+      - server-3
+
+volumes:
+  minio-data:

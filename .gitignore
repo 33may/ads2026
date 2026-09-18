@@ -1,0 +1,28 @@
+# Claude Code / AI assistant
+CLAUDE.md
+.claude/
+
+# Working notes stay local
+docs/*-notes.md
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# macOS / editors
+.DS_Store
+.vscode/
+
+# Archives, LaTeX build junk
+*.zip
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+.env
