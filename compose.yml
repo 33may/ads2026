@@ -41,7 +41,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       MINIO_BUCKET: ${MINIO_BUCKET}
       REDIS_URL: redis://redis:6379/0
-      CACHE_MODE: ${CACHE_MODE:-both}
+      CACHE: ${CACHE:-on}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     depends_on:

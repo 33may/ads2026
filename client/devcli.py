@@ -42,7 +42,7 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
 
     p = sub.add_parser("seed", help="upload every *.txt in a folder")
-    p.add_argument("--dir", type=Path, default=Path("texts"))
+    p.add_argument("--dir", type=Path, default=Path("texts/gutenberg"))
     p.set_defaults(func=cmd_seed)
 
     p = sub.add_parser("delete", help="remove one text")

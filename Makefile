@@ -3,7 +3,7 @@ PY      := $(shell conda info --base)/envs/ads_client/bin/python
 SINGLE  := docker compose -f compose.yml
 CLUSTER := docker compose -f compose.cluster.yml
 
-MODE ?= both        # cache mode for server-1: none | text | count | both
+CACHE ?= on         # cache for the servers: on | off
 SVC  ?= server-1
 N    ?= 10
 
@@ -11,10 +11,10 @@ N    ?= 10
 
 # --- cluster ---
 up:                 ## scenario 1: redis, minio, server-1
-	@CACHE_MODE=$(MODE) $(SINGLE) up -d --build --wait
+	@CACHE=$(CACHE) $(SINGLE) up -d --build --wait
 
 up-cluster:         ## scenario 2: redis, minio, server-1..3, lb
-	@CACHE_MODE=$(MODE) $(CLUSTER) up -d --build --wait
+	@CACHE=$(CACHE) $(CLUSTER) up -d --build --wait
 
 down:               ## stop whichever scenario is running
 	@$(SINGLE) down --remove-orphans
@@ -26,8 +26,8 @@ ps:
 logs:               ## make logs SVC=server-1
 	@docker compose logs -f $(SVC)
 
-mode:               ## make mode MODE=none   (restart server-1 in another cache mode, scenario 1)
-	@CACHE_MODE=$(MODE) $(SINGLE) up -d --wait server-1
+mode:               ## make mode CACHE=off   (restart server-1 with the cache off, scenario 1)
+	@CACHE=$(CACHE) $(SINGLE) up -d --wait server-1
 
 # --- data (developer) ---
 seed:

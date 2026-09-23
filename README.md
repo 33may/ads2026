@@ -16,14 +16,32 @@ MINIO_BUCKET=texts
 ```
 
 ```
-make up            # scenario 1: redis, minio, server-1
-make seed          # upload texts/ into MinIO
-make query K=eindhoven REF=eindhoven
+make up                 # scenario 1: redis, minio, server-1   (make up CACHE=off for the no-cache baseline)
+make seed               # upload texts/gutenberg/ into MinIO (once; the volume persists)
+make query K=the REF=mansfield-park
 make logs SVC=server-1
+make cache-flush
 make down
 ```
 
 MinIO console: http://localhost:19001
+
+## Corpus
+
+100 Project Gutenberg novels, 50k–200k words each, in `texts/gutenberg/` (`manifest.tsv` lists id, reference, word count).
+Re-fetch with `python texts/fetch_gutenberg.py 100`.
+
+## Experiment (Phase 2)
+
+```
+python -m client.loadgen --rate 70 --duration 20 --warmup 5 --label cache-on --out results/x.csv
+experiments/sweep.sh results/phase2      # cache off/on x 50 70 90 110 130 req/s, cold cache each run
+python -m client.plot results/phase2     # avg.png, p99.png, *-log.png, summary.tsv
+```
+
+`loadgen` is open-loop: every 1/rate seconds a new independent user connects, sends one `get_count`, disconnects.
+CSV columns: `conn_ms` (connect), `rpc_ms` (call), `total_ms` = both. Figures plot `total_ms`.
+For Phase 3 point it at the balancer with `--host/--port`.
 
 ## Where to work
 

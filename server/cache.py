@@ -1,4 +1,4 @@
-"""Cache access: counts and texts as plain Redis keys, hot keywords as a sorted set."""
+"""Cache access: counts as plain Redis keys, hot keywords as a sorted set."""
 import os
 
 import redis
@@ -16,14 +16,6 @@ class Cache:
 
     def set_count(self, reference, keyword, n):
         self._r.set(f"count:{reference}:{keyword}", n)
-
-    # --- text cache: text:<reference> -> str ---
-
-    def get_text(self, reference):
-        return self._r.get(f"text:{reference}")
-
-    def set_text(self, reference, text):
-        self._r.set(f"text:{reference}", text)
 
     # --- invalidation: a text changed or vanished, drop everything derived from it ---
 
