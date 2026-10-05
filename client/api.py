@@ -3,9 +3,11 @@ import os
 import time
 
 import rpyc
+from rpyc.core.stream import SocketStream
 
 DEFAULT_HOST = os.environ.get("ADS_HOST", "localhost")
 DEFAULT_PORT = int(os.environ.get("ADS_PORT", "18861"))
+CORRELATION_PREFIX = b"ADS-CORRELATION "
 
 
 class NoSuchReference(Exception):
@@ -22,8 +24,30 @@ def _translate(exc):
 class Client:
     """One connection to the service; each method is one remote call."""
 
-    def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
-        self._conn = rpyc.connect(host, port)
+    def __init__(
+        self, host=DEFAULT_HOST, port=DEFAULT_PORT, timeout=None,
+        correlation_id=None,
+    ):
+        config = {} if timeout is None else {"sync_request_timeout": timeout}
+        if correlation_id is None:
+            self._conn = rpyc.connect(host, port, config=config)
+        else:
+            try:
+                encoded_id = str(correlation_id).encode("ascii")
+            except UnicodeEncodeError:
+                raise ValueError(
+                    "correlation_id must be 1-64 ASCII characters"
+                ) from None
+            if not encoded_id or len(encoded_id) > 64 or b"\n" in encoded_id:
+                raise ValueError("correlation_id must be 1-64 ASCII characters")
+            stream = SocketStream.connect(host, port)
+            try:
+                stream.write(CORRELATION_PREFIX + encoded_id + b"\n")
+                self._conn = rpyc.connect_stream(stream, config=config)
+            except Exception:
+                stream.close()
+                raise
+        self.local_port = self._conn._channel.stream.sock.getsockname()[1]
         self._svc = self._conn.root
         self.last_ms = None          # client-observed latency of the last get_count
 

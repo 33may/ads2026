@@ -1,0 +1,706 @@
+{
+  "status": "complete",
+  "rates": [
+    50,
+    70,
+    90,
+    110,
+    130
+  ],
+  "measured_duration_seconds": 15,
+  "warmup_requests": [
+    0,
+    100,
+    500
+  ],
+  "warmup_max_attempts": {
+    "0": 0,
+    "100": 300,
+    "500": 1500
+  },
+  "warmup_rate": 100,
+  "request_timeout_seconds": 30,
+  "latency_metric": "rpc_ms",
+  "latency_definition": "client get_count send-to-response time",
+  "failed_requests": "retained in CSV and excluded only from latency percentiles",
+  "request_model": "one fresh RPyC connection per keyword request",
+  "schedule": "open-loop at the offered rate",
+  "server_count": 1,
+  "redis_flushed_before_each_repetition": true,
+  "processes_recreated_before_each_repetition": [
+    "server-1"
+  ],
+  "keyword_pool": [
+    "the",
+    "and",
+    "of",
+    "was",
+    "he",
+    "she",
+    "you",
+    "house",
+    "night",
+    "heart",
+    "love",
+    "death",
+    "king",
+    "sea",
+    "money",
+    "letter",
+    "london",
+    "horse",
+    "castle",
+    "whale"
+  ],
+  "measurement_seed": 2,
+  "repetitions": 3,
+  "mix": "uniform",
+  "modes": [
+    "off",
+    "on"
+  ],
+  "completed_runs": [
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 50,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 50,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 50,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 70,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 70,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 70,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 90,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 90,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 90,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 110,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 110,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 110,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 130,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 130,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 0,
+      "rate": 130,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 50,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 50,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 50,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 70,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 70,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 70,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 90,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 90,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 90,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 110,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 110,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 110,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 130,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 130,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 100,
+      "rate": 130,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 50,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 50,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 50,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 70,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 70,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 70,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 90,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 90,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 90,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 110,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 110,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 110,
+      "run": 3
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 130,
+      "run": 1
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 130,
+      "run": 2
+    },
+    {
+      "cache": "off",
+      "warmup": 500,
+      "rate": 130,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 50,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 50,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 50,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 70,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 70,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 70,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 90,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 90,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 90,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 110,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 110,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 110,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 130,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 130,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 0,
+      "rate": 130,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 50,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 50,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 50,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 70,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 70,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 70,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 90,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 90,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 90,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 110,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 110,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 110,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 130,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 130,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 100,
+      "rate": 130,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 50,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 50,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 50,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 70,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 70,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 70,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 90,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 90,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 90,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 110,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 110,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 110,
+      "run": 3
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 130,
+      "run": 1
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 130,
+      "run": 2
+    },
+    {
+      "cache": "on",
+      "warmup": 500,
+      "rate": 130,
+      "run": 3
+    }
+  ],
+  "reference_pool": [
+    "a-connecticut-yankee-in-king-arthur-s-court",
+    "a-journey-to-the-centre-of-the-earth",
+    "a-princess-of-mars",
+    "a-tale-of-two-cities",
+    "adventures-of-huckleberry-finn",
+    "agnes-grey",
+    "anne-of-green-gables",
+    "around-the-world-in-eighty-days",
+    "autobiography-of-benjamin-franklin",
+    "beyond-good-and-evil",
+    "black-beauty",
+    "cranford",
+    "desert-gold",
+    "desperate-remedies",
+    "dracula",
+    "dubliners",
+    "emma",
+    "far-from-the-madding-crowd",
+    "frankenstein-or-the-modern-prometheus",
+    "frankenstein-or-the-modern-prometheus-41445",
+    "great-expectations",
+    "grimms-fairy-tales",
+    "hard-times",
+    "herland",
+    "his-last-bow",
+    "jane-eyre-an-autobiography",
+    "jude-the-obscure",
+    "kidnapped",
+    "leaves-of-grass",
+    "life-on-the-mississippi",
+    "little-women",
+    "madame-bovary",
+    "mansfield-park",
+    "mary-barton",
+    "meditations",
+    "memoirs-of-fanny-hill",
+    "myths-and-legends-of-ancient-greece-and-rome",
+    "north-and-south",
+    "northanger-abbey",
+    "oliver-twist",
+    "persuasion",
+    "poirot-investigates",
+    "pride-and-prejudice",
+    "sense-and-sensibility",
+    "silas-marner",
+    "tess-of-the-d-urbervilles-a-pure-woman",
+    "the-adventures-of-ferdinand-count-fathom-complete",
+    "the-adventures-of-sherlock-holmes",
+    "the-adventures-of-tom-sawyer-complete",
+    "the-age-of-innocence",
+    "the-american",
+    "the-divine-comedy",
+    "the-first-men-in-the-moon",
+    "the-great-gatsby",
+    "the-hound-of-the-baskervilles",
+    "the-hound-of-the-baskervilles-3070",
+    "the-house-of-mirth",
+    "the-house-of-the-seven-gables",
+    "the-iliad",
+    "the-iliad-2199",
+    "the-innocents-abroad",
+    "the-jungle",
+    "the-jungle-book",
+    "the-kama-sutra-of-vatsyayana",
+    "the-king-in-yellow",
+    "the-last-of-the-mohicans-a-narrative-of-1757",
+    "the-last-of-the-mohicans-a-narrative-of-1757-27681",
+    "the-lost-world",
+    "the-memoirs-of-sherlock-holmes",
+    "the-moonstone",
+    "the-mysterious-affair-at-styles",
+    "the-mysterious-island",
+    "the-mystery-of-edwin-drood",
+    "the-odyssey",
+    "the-picture-of-dorian-gray",
+    "the-portrait-of-a-lady-volume-1",
+    "the-prince",
+    "the-return-of-sherlock-holmes",
+    "the-return-of-sherlock-holmes-108",
+    "the-romance-of-lust-a-classic-victorian-erotic-novel",
+    "the-scarlet-letter",
+    "the-scarlet-letter-33",
+    "the-secret-adversary",
+    "the-secret-garden",
+    "the-secret-garden-17396",
+    "the-song-of-the-lark",
+    "the-tenant-of-wildfell-hall",
+    "the-vicomte-de-bragelonne",
+    "the-war-of-the-worlds",
+    "the-warden",
+    "the-wind-in-the-willows",
+    "the-works-of-edgar-allan-poe-volume-2",
+    "thus-spake-zarathustra-a-book-for-all-and-none",
+    "treasure-island",
+    "twenty-thousand-leagues-under-the-sea",
+    "villette",
+    "walden-and-on-the-duty-of-civil-disobedience",
+    "washington-square",
+    "white-fang",
+    "wuthering-heights"
+  ]
+}

@@ -11,6 +11,7 @@ Reusable across phases: point --host/--port at the load balancer.
 """
 import argparse
 import csv
+import math
 import os
 import random
 import threading
@@ -40,21 +41,62 @@ def make_workload(references, mix, seed):
 
 # --- engine ---------------------------------------------------------------
 
-def one_user(t_sched, keyword, reference, host, port, rows):
+
+class ActiveConnectionTracker:
+    """Thread-safe per-server active counts for direct-server experiments."""
+
+    def __init__(self, servers):
+        self.counts = {server: 0 for server in servers}
+        self._lock = threading.Lock()
+
+    def connected(self, server):
+        with self._lock:
+            self.counts[server] += 1
+            return dict(self.counts)
+
+    def disconnected(self, server):
+        with self._lock:
+            self.counts[server] -= 1
+
+
+def one_user(
+    t_sched, keyword, reference, host, port, rows, connection_tracker=None,
+    correlation_id=None, timeout=30,
+):
     """One independent user: connect, ask once, disconnect. Runs in its own thread."""
     t_start = time.perf_counter()
     ok, conn_ms, rpc_ms = 1, float("nan"), float("nan")
+    local_port = None
+    active_connections = None
+    error_type = ""
+    tracked = False
+    if connection_tracker is not None:
+        # Count the request at admission, including time spent connecting and
+        # resolving the RPyC root object under overload.
+        active_connections = connection_tracker.connected("server-1")
+        tracked = True
     try:
-        client = Client(host, port)
+        client = Client(
+            host, port, timeout=timeout, correlation_id=correlation_id
+        )
+        local_port = client.local_port
         conn_ms = (time.perf_counter() - t_start) * 1000
         try:
             client.get_count(keyword, reference)
-            rpc_ms = client.last_ms
         finally:
+            if client.last_ms is not None:
+                rpc_ms = client.last_ms
             client.close()
-    except Exception:
+    except Exception as exc:
         ok = 0
-    rows.append((t_sched, conn_ms, rpc_ms, keyword, reference, ok))
+        error_type = type(exc).__name__
+    finally:
+        if tracked:
+            connection_tracker.disconnected("server-1")
+    rows.append((
+        t_sched, conn_ms, rpc_ms, keyword, reference, ok, local_port,
+        active_connections, correlation_id, error_type,
+    ))
 
 
 def _sleep_until(t):
@@ -92,24 +134,63 @@ def run(host, port, rate, duration, mix, warmup, seed):
     return [r for r in rows if r[0] >= cutoff], t0
 
 
-def write_csv(path, rows, t0, label, rate):
+def write_csv(path, rows, t0, label, rate, repetition=1, connection_states=None):
+    """Write each response with active counts at connection assignment time."""
+    connection_states = connection_states or {}
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["label", "rate", "t_s", "conn_ms", "rpc_ms", "total_ms", "keyword", "reference", "ok"])
-        for t_sched, conn, rpc, kw, ref, ok in rows:
-            w.writerow([label, rate, f"{t_sched - t0:.4f}", f"{conn:.3f}", f"{rpc:.3f}", f"{conn + rpc:.3f}", kw, ref, ok])
+        w.writerow([
+            "label", "rate", "run", "t_s", "conn_ms", "rpc_ms", "total_ms",
+            "keyword", "reference", "ok",
+            "error_type", "selected_server",
+            "server_1_connections",
+            "server_2_connections", "server_3_connections",
+            "server_1_response_ewma_ms",
+            "server_2_response_ewma_ms", "server_3_response_ewma_ms",
+        ])
+        for row in rows:
+            t_sched, conn, rpc, kw, ref, ok = row[:6]
+            local_port = row[6] if len(row) > 6 else None
+            direct_counts = row[7] if len(row) > 7 else None
+            correlation_id = row[8] if len(row) > 8 else None
+            error_type = row[9] if len(row) > 9 else ""
+            state = connection_states.get(
+                correlation_id, connection_states.get(local_port, {})
+            )
+            counts = direct_counts or state.get("connections", {})
+            has_counts = direct_counts is not None or "connections" in state
+            response_ewma = state.get("response_ewma_ms", {})
+            selected_server = state.get(
+                "selected_server", "server-1" if direct_counts else ""
+            )
+            w.writerow([
+                label, rate, repetition, f"{t_sched - t0:.4f}",
+                f"{conn:.3f}", f"{rpc:.3f}", f"{conn + rpc:.3f}",
+                kw, ref, ok, error_type, selected_server,
+                counts.get("server-1", 0) if has_counts else "",
+                counts.get("server-2", 0) if has_counts else "",
+                counts.get("server-3", 0) if has_counts else "",
+                *("" if response_ewma.get(f"server-{number}") is None else
+                  f"{response_ewma[f'server-{number}']:.3f}"
+                  for number in (1, 2, 3)),
+            ])
 
 
 def summary(rows):
     ok = [r for r in rows if r[5]]
-    p = lambda xs, f: xs[min(len(xs) - 1, int(f * len(xs)))] if xs else float("nan")
+    p = lambda xs, f: xs[min(len(xs) - 1, math.ceil(f * len(xs)) - 1)] if xs else float("nan")
     conn = sorted(r[1] for r in ok)
     rpc = sorted(r[2] for r in ok)
-    tot = sorted(r[1] + r[2] for r in ok)
-    return (f"n={len(rows)} ok={len(ok)}  "
-            f"conn avg={sum(conn)/len(conn):.1f}  rpc avg={sum(rpc)/len(rpc):.1f}  "
-            f"total avg={sum(tot)/len(tot):.1f} p50={p(tot,.5):.1f} p99={p(tot,.99):.1f} ms")
+    success_pct = 100 * len(ok) / len(rows) if rows else float("nan")
+    if not ok:
+        return f"attempted={len(rows)} successful=0 success={success_pct:.1f}%"
+    return (
+        f"attempted={len(rows)} successful={len(ok)} success={success_pct:.1f}%  "
+        f"conn avg={sum(conn)/len(conn):.1f} ms  "
+        f"rpc avg={sum(rpc)/len(rpc):.1f} p50={p(rpc, .5):.1f} "
+        f"p99={p(rpc, .99):.1f} ms"
+    )
 
 
 def main():

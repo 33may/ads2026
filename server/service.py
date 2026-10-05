@@ -84,7 +84,14 @@ class WordCountService(rpyc.Service):
 if __name__ == "__main__":
     store = Store()
     cache = Cache()
-    logger.info("cache {} | listening on :{}", "on" if CACHE else "off", PORT)
+    logger.info(
+        "cache {} | redis blocking pool max_connections={} timeout={}s | "
+        "listening on :{}",
+        "on" if CACHE else "off",
+        cache.max_connections,
+        cache.pool_timeout,
+        PORT,
+    )
     ThreadedServer(
         WordCountService,
         port=PORT,

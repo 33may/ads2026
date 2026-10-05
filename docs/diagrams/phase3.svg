@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/>
+    </marker>
+    <style>
+      text { font-family: Helvetica, Arial, sans-serif; fill: #222; }
+      .title { font-size: 24px; font-weight: 700; }
+      .name { font-size: 18px; font-weight: 700; text-anchor: middle; }
+      .detail { font-size: 14px; text-anchor: middle; }
+      .edge { stroke: #555; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .edge-label { font-size: 13px; text-anchor: middle; paint-order: stroke; stroke: white; stroke-width: 5px; }
+    </style>
+  </defs>
+
+  <rect width="1400" height="720" fill="white"/>
+  <text x="700" y="38" class="title" text-anchor="middle">Phase 3 — three replicas behind a dynamic TCP load balancer</text>
+
+  <rect x="250" y="65" width="1110" height="610" rx="24" fill="#fafafa" stroke="#888" stroke-width="2" stroke-dasharray="9 7"/>
+  <text x="275" y="98" font-size="17" font-weight="700">Logical server cluster (Docker Compose)</text>
+
+  <rect x="30" y="285" width="170" height="105" rx="16" fill="#f9e4d9" stroke="#d97a55" stroke-width="2"/>
+  <text x="115" y="326" class="name">Client</text>
+  <text x="115" y="352" class="detail">RPyC requests</text>
+
+  <rect x="310" y="260" width="230" height="150" rx="16" fill="#f6e7b0" stroke="#b58b17" stroke-width="2"/>
+  <text x="425" y="300" class="name">Load balancer</text>
+  <text x="425" y="330" class="detail">async TCP byte-stream proxy</text>
+  <text x="425" y="356" class="detail">Least Connections / LRT</text>
+  <text x="425" y="382" class="detail">combined LC + LRT</text>
+
+  <g>
+    <rect x="650" y="130" width="210" height="92" rx="14" fill="#d6e8f7" stroke="#4f86b8" stroke-width="2"/>
+    <text x="755" y="166" class="name">server-1</text><text x="755" y="194" class="detail">RPyC word count</text>
+    <rect x="650" y="290" width="210" height="92" rx="14" fill="#d6e8f7" stroke="#4f86b8" stroke-width="2"/>
+    <text x="755" y="326" class="name">server-2</text><text x="755" y="354" class="detail">RPyC word count</text>
+    <rect x="650" y="450" width="210" height="92" rx="14" fill="#d6e8f7" stroke="#4f86b8" stroke-width="2"/>
+    <text x="755" y="486" class="name">server-3</text><text x="755" y="514" class="detail">RPyC word count</text>
+  </g>
+
+  <g>
+    <rect x="1060" y="180" width="230" height="115" rx="48" fill="#e4efdb" stroke="#6e9f4a" stroke-width="2"/>
+    <text x="1175" y="220" class="name">Shared Redis</text>
+    <text x="1175" y="249" class="detail">count cache + hot keys</text>
+    <rect x="1060" y="405" width="230" height="115" rx="48" fill="#e4efdb" stroke="#6e9f4a" stroke-width="2"/>
+    <text x="1175" y="445" class="name">Shared MinIO</text>
+    <text x="1175" y="474" class="detail">source texts</text>
+  </g>
+
+  <path d="M 200 337 L 310 337" class="edge" stroke="#c0392b"/>
+  <text x="255" y="322" class="edge-label">RPyC over TCP</text>
+  <path d="M 540 307 C 585 307 600 176 650 176" class="edge"/>
+  <path d="M 540 335 L 650 335" class="edge"/>
+  <path d="M 540 363 C 585 363 600 496 650 496" class="edge"/>
+  <text x="590" y="286" class="edge-label">TCP byte stream</text>
+
+  <path d="M 860 166 C 945 166 970 218 1060 225" class="edge"/>
+  <path d="M 860 322 C 950 322 965 255 1060 250" class="edge"/>
+  <path d="M 860 478 C 945 478 970 280 1060 270" class="edge"/>
+  <text x="958" y="190" class="edge-label">RESP/TCP</text>
+
+  <path d="M 860 194 C 950 194 965 425 1060 435" class="edge"/>
+  <path d="M 860 350 C 950 350 965 457 1060 457" class="edge"/>
+  <path d="M 860 506 C 950 506 965 482 1060 480" class="edge"/>
+  <text x="958" y="525" class="edge-label">S3/HTTP</text>
+
+  <text x="700" y="640" font-size="15" text-anchor="middle">Redis and MinIO are shared by all explicitly named replicas; Docker Compose's built-in replication/load balancing is not used.</text>
+</svg>

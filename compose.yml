@@ -3,6 +3,19 @@ name: ads
 
 services:
 
+  client:
+    build: ./client
+    image: ads-client
+    container_name: ads-client
+    environment:
+      ADS_HOST: server-1
+      ADS_PORT: ${SERVER_PORT}
+    volumes:
+      - ./texts:/app/texts:ro
+    depends_on:
+      server-1:
+        condition: service_started
+
   redis:
     image: redis:7
     container_name: ads-redis
@@ -13,7 +26,7 @@ services:
       retries: 10
 
   minio:
-    image: quay.io/minio/minio
+    image: ghcr.io/coollabsio/minio
     container_name: ads-minio
     command: server /data --console-address ":9001"
     environment:
@@ -41,6 +54,8 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       MINIO_BUCKET: ${MINIO_BUCKET}
       REDIS_URL: redis://redis:6379/0
+      REDIS_MAX_CONNECTIONS: ${REDIS_MAX_CONNECTIONS:-64}
+      REDIS_POOL_TIMEOUT: ${REDIS_POOL_TIMEOUT:-5}
       CACHE: ${CACHE:-on}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"

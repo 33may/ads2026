@@ -1,4 +1,4 @@
-# Scenario 2 (Phase 3+): three word-count servers behind a load balancer on localhost:${SERVER_PORT}.
+# Scenario 2 (Phase 3): three word-count servers behind a load balancer on localhost:${SERVER_PORT}.
 # Self-contained: never combined with compose.yml. `make down` before switching scenarios.
 name: ads
 
@@ -12,6 +12,8 @@ x-server: &server            # one definition, three replicas; only SERVER_NAME 
     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     MINIO_BUCKET: ${MINIO_BUCKET}
     REDIS_URL: redis://redis:6379/0
+    REDIS_MAX_CONNECTIONS: ${REDIS_MAX_CONNECTIONS:-64}
+    REDIS_POOL_TIMEOUT: ${REDIS_POOL_TIMEOUT:-5}
     CACHE: ${CACHE:-on}
   depends_on:
     redis:
@@ -20,6 +22,19 @@ x-server: &server            # one definition, three replicas; only SERVER_NAME 
       condition: service_healthy
 
 services:
+
+  client:
+    build: ./client
+    image: ads-client
+    container_name: ads-client
+    environment:
+      ADS_HOST: lb
+      ADS_PORT: ${SERVER_PORT}
+    volumes:
+      - ./texts:/app/texts:ro
+    depends_on:
+      lb:
+        condition: service_started
 
   redis:
     image: redis:7
@@ -31,7 +46,7 @@ services:
       retries: 10
 
   minio:
-    image: quay.io/minio/minio
+    image: ghcr.io/coollabsio/minio
     container_name: ads-minio
     command: server /data --console-address ":9001"
     environment:
@@ -72,15 +87,21 @@ services:
     build: ./lb
     image: ads-lb
     container_name: lb
+    command: ["--algorithm", "${LB_ALGORITHM:-least-connections}"]
     environment:
       SERVER_PORT: ${SERVER_PORT}
+      LB_METRICS_PORT: ${LB_METRICS_PORT:-18860}
       BACKENDS: server-1:${SERVER_PORT},server-2:${SERVER_PORT},server-3:${SERVER_PORT}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
+      - "127.0.0.1:${LB_METRICS_PORT:-18860}:${LB_METRICS_PORT:-18860}"
     depends_on:
-      - server-1
-      - server-2
-      - server-3
+      server-1:
+        condition: service_started
+      server-2:
+        condition: service_started
+      server-3:
+        condition: service_started
 
 volumes:
   minio-data:

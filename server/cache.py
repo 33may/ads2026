@@ -6,7 +6,23 @@ import redis
 
 class Cache:
     def __init__(self):
-        self._r = redis.Redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
+        self.max_connections = int(os.environ.get("REDIS_MAX_CONNECTIONS", "64"))
+        self.pool_timeout = float(os.environ.get("REDIS_POOL_TIMEOUT", "5"))
+        if self.max_connections <= 0:
+            raise ValueError("REDIS_MAX_CONNECTIONS must be greater than zero")
+        if self.pool_timeout < 0:
+            raise ValueError("REDIS_POOL_TIMEOUT cannot be negative")
+
+        # The regular redis-py pool raises MaxConnectionsError immediately
+        # during a burst. A bounded blocking pool reuses at most this many
+        # connections and waits briefly for one to be returned instead.
+        pool = redis.BlockingConnectionPool.from_url(
+            os.environ["REDIS_URL"],
+            max_connections=self.max_connections,
+            timeout=self.pool_timeout,
+            decode_responses=True,
+        )
+        self._r = redis.Redis(connection_pool=pool)
 
     # --- count cache: count:<reference>:<keyword> -> int ---
 

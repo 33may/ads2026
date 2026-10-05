@@ -1,0 +1,32 @@
+digraph phase3 {
+  rankdir=LR; splines=true; nodesep=0.45; ranksep=0.9; pad=0.25;
+  fontname="Helvetica";
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled"];
+  edge [fontname="Helvetica", fontsize=9, color="#555555"];
+
+  client [label=<<b>Client</b><br/>RPyC requests>, fillcolor="#F9E4D9", color="#D97A55"];
+
+  subgraph cluster_server {
+    label="Logical server cluster (Docker Compose)";
+    style="rounded,dashed,filled"; fillcolor="#FAFAFA"; color="#888888";
+
+    lb [label=<<b>Load balancer</b><br/>async TCP byte-stream proxy<br/>LC / LRT / Combined>, fillcolor="#F6E7B0", color="#B58B17"];
+    s1 [label=<<b>server-1</b><br/>RPyC word count>, fillcolor="#D6E8F7", color="#4F86B8"];
+    s2 [label=<<b>server-2</b><br/>RPyC word count>, fillcolor="#D6E8F7", color="#4F86B8"];
+    s3 [label=<<b>server-3</b><br/>RPyC word count>, fillcolor="#D6E8F7", color="#4F86B8"];
+    redis [shape=cylinder, label=<<b>Shared Redis</b><br/>count cache + hot keys>, fillcolor="#E4EFDB", color="#6E9F4A"];
+    minio [shape=cylinder, label=<<b>Shared MinIO</b><br/>source texts>, fillcolor="#E4EFDB", color="#6E9F4A"];
+
+    lb -> s1 [label="TCP byte stream"];
+    lb -> s2 [label="TCP byte stream"];
+    lb -> s3 [label="TCP byte stream"];
+    s1 -> redis [label="RESP/TCP"];
+    s2 -> redis [label="RESP/TCP"];
+    s3 -> redis [label="RESP/TCP"];
+    s1 -> minio [label="S3/HTTP"];
+    s2 -> minio [label="S3/HTTP"];
+    s3 -> minio [label="S3/HTTP"];
+  }
+
+  client -> lb [label="RPyC over TCP", color="#C0392B", penwidth=1.5];
+}
