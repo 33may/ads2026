@@ -134,8 +134,10 @@ make experiment-phase4 ARGS=--dry-run   # inspect the matrix; no Docker changes
 make experiment-phase4                # 12 runs, about 12 minutes plus setup
 ```
 
-The controller uses the same `client.api.Client` as normal queries. It recreates
-all three replicas and the balancer before each run, retaining the MinIO volume.
+The controller uses the same `client.api.Client` as normal queries. It builds
+images once per session and recreates all three replicas and the balancer before
+each run, retaining the MinIO volume. The one-second shutdown grace applies only
+to preparation between runs, after the previous measured sessions have drained.
 It uploads the repository's canonical Mansfield Park text, flushes the shared
 cache and warms `the / mansfield-park` (6208). Direct RPyC readiness is checked
 on all replicas, plus health admission when FT is on.

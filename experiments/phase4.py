@@ -193,9 +193,13 @@ def run_condition(args, directory, policy, ft, repetition, client_type):
     config = json.loads(controller.command("config", "--format", "json", record=False))
     port = int(config["services"]["lb"]["environment"]["SERVER_PORT"])
     metrics_port = int(config["services"]["lb"]["environment"]["LB_METRICS_PORT"])
-    controller.command("up", "-d", "--build", "--wait", timeout=300)
-    controller.command("up", "-d", "--no-deps", "--force-recreate", *SERVERS, "lb", "client")
+    controller.command("up", "-d", "--no-build", "--wait", "redis", "minio")
+    # Previous measured sessions have drained. Recreate only the application
+    # processes, using the same images built once for the entire matrix.
+    controller.command("up", "-d", "--no-deps", "--no-build", "--force-recreate",
+                       "--timeout", "1", *SERVERS, "lb", "client")
     ready(controller, port, metrics_port, ft, client_type)
+    controller.command("images", "--format", "json")
     controller.status("ready")
     epoch, start = time.time(), time.monotonic()
     controller.event("load_start", epoch=epoch, rate=args.rate)
@@ -345,6 +349,8 @@ def main(argv=None):
                rate=args.rate, stage_seconds=args.stage_seconds, keyword=KEYWORD,
                reference=REFERENCE, expected=EXPECTED, sample_interval_s=1))
     print(f"Recording {len(matrix)} runs under {output}", flush=True)
+    build = Controller(args, output, matrix[0][0], matrix[0][1])
+    build.command("build", timeout=300)
     try:
         for policy, ft, repeat in matrix:
             name = f"{policy}-ft-{ft}-r{repeat}"
