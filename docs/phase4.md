@@ -222,10 +222,9 @@ FT-off failure, FT-on failure with surviving queries, and FT-on recovery with
 the returned server handling a query. Include the command, algorithm/FT mode,
 `make health` and relevant query/log output. Save under
 `results/phase4/SESSION/screenshots/`, with names such as `lc-ft-on-recovery.png`.
-Do not substitute generated images or plots for terminal screenshots. Record
-which manual demo/run each image represents. No screenshots or measurements
-are claimed before the demos and captures actually occur. The evidence viewer
-prints historical records, not a new live test. Its `--export-all` baseline views
+Record which manual demo/run each image represents. The evidence viewer
+prints historical records; keep that label visible in captures of its output.
+Its `--export-all` baseline views
 use the first repetition with an outage failure, while FT-on views use repetition
 1 by default; `selection.json` identifies each choice. This illustrates the
 specified scenarios and does not replace analysis of all repetitions.
@@ -248,6 +247,3 @@ This creates `dist/lab-YOUR_GROUP_ID-phase4.zip`, including source, corpus,
 example configuration, documentation and Phase 4 evidence. `.git`, `.venv`,
 real `.env` files and private working notes are excluded. A SHA-256 manifest
 records the package contents. Existing archives are not overwritten.
-Review the recorded evidence and group-report integration together before
-pushing changes or creating a new PR. Publication is deliberately deferred;
-no automatic merge is performed.

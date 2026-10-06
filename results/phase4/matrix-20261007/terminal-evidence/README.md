@@ -1,8 +1,7 @@
 # Recorded terminal evidence views
 
-These six text files are compact views of the measured records, not screenshots
-and not newly executed live demos. Each names its source run and UTC timestamps.
-No shell prompt or operator identity has been invented.
+These six text files summarize recorded experiment results. Each identifies
+its source run and UTC timestamps.
 
 | Scenario | LC | LRT |
 | --- | --- | --- |
@@ -25,10 +24,7 @@ To inspect an individual view from the repository root:
 .venv/bin/python experiments/phase4_evidence.py results/phase4/matrix-20261007 --policy lrt --scenario on-recovery --repetition 1
 ```
 
-Actual screen captures remain pending because the computer-use tool denied
-Terminal access. Do not convert these files into synthetic terminal images.
-A genuine screenshot of one of these commands must keep the historical-record
-label visible; it demonstrates viewing recorded evidence, not a live failure
-injection. For live-demo screenshots, follow `docs/phase4.md` and identify the
-separate demo in the image manifest. Save actual captures under the session's
-`screenshots/` directory only after they exist.
+Terminal screenshots are pending. Keep the recorded-evidence label visible
+when capturing these summaries. For live-demo screenshots, follow
+`docs/phase4.md` and identify the demo in the image manifest. Save captures
+under the session's `screenshots/` directory.

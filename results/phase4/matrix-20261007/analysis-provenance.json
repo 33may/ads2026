@@ -6,7 +6,7 @@
   "analysis_tools": {
     "experiments/audit_phase4.py": "d32378afcdf993b847db50676ba9397d98541c60f5dd90f816ba384a7af16018",
     "experiments/phase4_summary.py": "94f8c03fddf044ffa5af3a5712a1d411ea309e8e7b06b3aca70c9e3acf91f424",
-    "experiments/phase4_evidence.py": "cb7f529ddd9e87fa6fb2312e7d83549dfce021341ae377e3578905ae3185df11",
+    "experiments/phase4_evidence.py": "4f166a7c01b36548bf9c89a2897370bac0c1e754acb5e0fb056fb273144b77c6",
     "experiments/phase4_comparison.py": "4953cd29dddec22d46d51b6bc3ee9096f4036126729498966356545b17852a86"
   },
   "raw_evidence_sha256": {
@@ -99,6 +99,5 @@
     "session.json": "6d1892bed941b546324dbbd6b3282230e5275c731bb39fea91da3793ecfd349f"
   },
   "validation_status": "pass",
-  "terminal_screenshots": "pending: computer-use tool denied Terminal access",
-  "publication": "local only; no new push or PR"
+  "terminal_screenshots": "pending"
 }

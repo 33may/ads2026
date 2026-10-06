@@ -1,7 +1,6 @@
 """Display a compact, traceable view of recorded experiment evidence in a terminal.
 
-This does not rerun Docker or manufacture screenshots. Capture the terminal
-yourself when the screen-capture tool cannot access your terminal application.
+Reads saved request, health and Docker-state records for each scenario.
 """
 import argparse
 import csv

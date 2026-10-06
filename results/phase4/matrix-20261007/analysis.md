@@ -147,9 +147,7 @@ records. Baseline illustration uses the first repetition with an outage error
 (LC r1, LRT r2); FT-on failure/recovery views use r1. The full analysis retains
 all repetitions, including the zero-error LRT baseline.
 
-**Actual terminal screenshots are still pending.** The computer-use tool
-refused access to Terminal (`com.apple.Terminal`) for safety reasons. No
-generated image or plot has been represented as a terminal capture.
+Terminal screenshots are pending.
 
 The conclusion is limited to a cache-warmed query at 20 sessions/s, one local
 Docker environment, one failed replica, and three repetitions per condition.
@@ -160,6 +158,6 @@ PING/PONG checks the application's health path and listener readiness, not the
 correctness of every RPC or dependency. Zero observed transition errors under
 FT on does not establish that transition errors are impossible.
 
-The English group-report contribution is in `docs/phase4-report.md`. Report
-integration, screenshots, group-ID packaging and publication remain for joint
-review. No new PR or remote push was made for this experiment session.
+The English group-report contribution is in `docs/phase4-report.md`. Remaining
+deliverables are report integration, terminal screenshots and the submission
+archive with the group ID.

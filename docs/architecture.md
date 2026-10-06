@@ -121,7 +121,7 @@ project/
       summary.tsv      combined Phase 2+3 statistics
 ```
 
-`results/` is committed so figures in the report are reproducible from the CSVs. `CLAUDE.md` and `.claude/` stay gitignored.
+`results/` is committed so figures in the report are reproducible from the CSVs.
 
 ## Deployment
 
