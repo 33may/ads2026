@@ -2,6 +2,10 @@
 
 Architecture and interfaces: `docs/architecture.md`.
 
+Phase 4 replica failure detection, Docker demo, recorded experiments and group
+handoff: [Phase 4 guide](docs/phase4.md). It is opt-in with `FT=on`; the default
+`FT=off` keeps the Phase 3 comparison available.
+
 ## Setup
 
 The client, server, load balancer, Redis, and MinIO are all declared as Compose
