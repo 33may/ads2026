@@ -241,7 +241,7 @@ specified scenarios and does not replace analysis of all repetitions.
 
 This contribution belongs to **ADS Group 44** (submission group ID: `44`).
 
-Use `docs/phase4-report.md` as the English contribution to the group's IEEE
+Use `docs/phase4-report.md` as a working draft for the group's IEEE
 two-column report. `docs/phase4-report.tex` provides the same section in the
 standard IEEE conference class, with a standalone preview. Copy the marked
 section into the group's main document. The assignment's **three-page text limit applies to the whole

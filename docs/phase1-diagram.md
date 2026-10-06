@@ -13,7 +13,7 @@ ADS-ArchtecturalStyles.pdf slides 24–27.
 - Rule: talks to the service only — never to Redis or the file store.
 
 ### Developer client  (outside the server boundary)
-- Role: developer/operator tool; uploads texts, inspects usage.
+- Role: developer client; uploads texts, inspects usage.
 - Provides: nothing.
 - Requires: Developer API of the Word-count service.
 - Same rule: service only.

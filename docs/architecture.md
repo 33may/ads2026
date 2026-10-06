@@ -95,7 +95,7 @@ project/
   compose.yml          scenario 1: redis, minio, server-1
   compose.cluster.yml  scenario 2: redis, minio, server-1..3, lb (Phase 3)
   .env                 ports, MinIO credentials, defaults
-  Makefile             every operator and demo command (see Operations)
+  Makefile             service and demo commands (see Operations)
   server/              image ads-server
     Dockerfile
     requirements.txt   rpyc, redis, boto3
@@ -144,7 +144,7 @@ published `localhost:18861`; in either case the client API is unchanged.
 
 ## Operations and demo
 
-Everything an operator or a debrief needs is a `make` target, run from `project/`. The client targets are thin wrappers around the `client/` package.
+Service and demo commands are available as `make` targets, run from the repository root. The client targets call the `client/` package.
 
 Cluster
 - `make up` / `make up-cluster` — start scenario 1 / scenario 2 (builds images if needed)

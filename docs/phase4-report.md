@@ -1,8 +1,8 @@
-# Phase 4 report contribution
+# Phase 4 report draft — ADS Group 44
 
 [IEEE LaTeX section and standalone preview](phase4-report.tex).
-The section below is the contribution of **ADS Group 44** for integration into
-the group's combined report.
+This working draft collects our Phase 4 method and results. Use it as a shared
+reference when writing the combined group report; shorten or adapt it as needed.
 Detailed measurements are in [the experiment analysis](../results/phase4/matrix-20261007/analysis.md);
 live figures and captions are in [the screenshot guide](../results/phase4/live-demo-2026-10-07/README.md).
 

@@ -6,6 +6,9 @@ Phase 4 replica failure detection, Docker demo, recorded experiments and group
 handoff: [Phase 4 guide](docs/phase4.md). It is opt-in with `FT=on`; the default
 `FT=off` keeps the Phase 3 comparison available.
 
+ADS Group 44's [Phase 4 report draft](docs/phase4-report.md) collects the method
+and results for use when writing the combined group report.
+
 ## Setup
 
 The client, server, load balancer, Redis, and MinIO are all declared as Compose

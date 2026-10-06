@@ -26,7 +26,7 @@ Client-server style. The client sees one logical server (one hostname:port); ins
 Components
 
 - Client. End-user program, uses the client API. Talks only to the word-count service, never to Redis or the file store.
-- Developer client. Operator tool, uses the developer API. Same rule.
+- Developer client. Uses the developer API. Same rule.
 - Word-count service. Python process, RPyC server. Owns all logic; exposes the client API and the developer API on the same port. One instance in Phase 2, three replicas behind the load balancer in Phase 3.
 - Cache. Redis container shared by all service instances. Holds `(reference, keyword) → count` and a sorted set `hot_keywords` with `keyword → request count`.
 - File store. S3-like object store container, single source of truth for texts. `GET /texts/<ref>` (404 if missing), `PUT /texts/<ref>`, `GET /texts?q=<name_query>`.

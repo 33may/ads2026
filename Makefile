@@ -1,4 +1,4 @@
-# Operator and demo commands for the word-count service. Run from project/.
+# Service and demo commands. Run from the repository root.
 SINGLE  := docker compose -f compose.yml
 CLUSTER := docker compose -f compose.cluster.yml
 CLIENT  := docker exec ads-client python
