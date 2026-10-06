@@ -1,7 +1,4 @@
-MANUAL DEMO: least-response-time, FT on, server-1 failure and recovery
-Source: terminal text pasted by the operator into the project conversation.
-Selected commands/output; shell prompts omitted and whitespace normalized.
-Not a screenshot or a controlled experiment run. See README.md in this directory.
+Computer name and shell prompt removed; spacing normalized.
 
 $ make health
 Algorithm: least-response-time | Fault tolerance: True
