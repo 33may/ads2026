@@ -217,14 +217,22 @@ at observed exclusion and ends at restart command start. Every transition error
 still counts in the overall and per-phase totals. Review `needs-review` runs;
 do not silently discard them. FT off is the comparison baseline, not a pass.
 
-Collect **six genuine terminal screenshots**, two algorithms × these moments:
-FT-off failure, FT-on failure with surviving queries, and FT-on recovery with
-the returned server handling a query. Include the command, algorithm/FT mode,
-`make health` and relevant query/log output. Save under
-`results/phase4/SESSION/screenshots/`, with names such as `lc-ft-on-recovery.png`.
-Record which manual demo/run each image represents. The evidence viewer
-prints historical records; keep that label visible in captures of its output.
-Its `--export-all` baseline views
+The live demonstration uses **four primary terminal screenshots**: LC/LRT ×
+FT-on failure/recovery. Include the command, algorithm/FT mode, Docker container
+status (`docker compose -f compose.cluster.yml ps --all server-1 server-2 server-3`),
+`make health`, and query output. For recovery, also include a new query log from
+the returned server. FT-off failure results are documented by the controlled
+experiment's baseline runs, tables and timelines.
+
+The completed captures and captions are in
+`results/phase4/live-demo-2026-10-07/`, with an additional LRT preparation
+screenshot. The screenshot count is an evidence-presentation choice; the
+assignment requires Docker status evidence and clear results for both
+algorithms without prescribing six images.
+
+The evidence viewer prints historical records; keep that label visible in
+captures of its output. Its six `--export-all` text views are separate from the
+live screenshots. Its baseline views
 use the first repetition with an outage failure, while FT-on views use repetition
 1 by default; `selection.json` identifies each choice. This illustrates the
 specified scenarios and does not replace analysis of all repetitions.

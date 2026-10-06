@@ -24,7 +24,7 @@ To inspect an individual view from the repository root:
 .venv/bin/python experiments/phase4_evidence.py results/phase4/matrix-20261007 --policy lrt --scenario on-recovery --repetition 1
 ```
 
-Terminal screenshots are pending. Keep the recorded-evidence label visible
-when capturing these summaries. For live-demo screenshots, follow
-`docs/phase4.md` and identify the demo in the image manifest. Save captures
-under the session's `screenshots/` directory.
+Live failure/recovery screenshots for LC and LRT are available in
+[live-demo-2026-10-07](../../live-demo-2026-10-07/README.md).
+The six text views here summarize the controlled matrix. Keep the
+recorded-evidence label visible when capturing their output.

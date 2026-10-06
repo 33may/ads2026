@@ -1,0 +1,88 @@
+[
+  {
+    "file": "lc-ft-on-failure.png",
+    "source_filename": "Screenshot 2026-10-07 at 00.59.50.png",
+    "sha256": "594eafdae7ecf48ae1f9d0392f3cfc14a5519b44c369d4207ad59609639b9e9f",
+    "algorithm": "least-connections",
+    "fault_tolerance": true,
+    "scenario": "replica failure",
+    "target": "server-2",
+    "observed_docker_state": "Exited (137)",
+    "observed_health": "unhealthy",
+    "successful_queries_shown": 6,
+    "expected_count": 6208
+  },
+  {
+    "file": "lc-ft-on-recovery.png",
+    "source_filename": "Screenshot 2026-10-07 at 01.03.34.png",
+    "sha256": "9622a995012a61e37c01de9cdaef6e4cb75b57a1318e936f6fc5302f59efc5cc",
+    "algorithm": "least-connections",
+    "fault_tolerance": true,
+    "scenario": "replica recovery",
+    "target": "server-2",
+    "observed_docker_state": "Up 17 seconds",
+    "observed_health": "healthy",
+    "successful_queries_shown": 6,
+    "expected_count": 6208,
+    "returned_target_query_log_entries": 2,
+    "cumulative_attempts": {
+      "server-1": 6,
+      "server-2": 2,
+      "server-3": 5
+    }
+  },
+  {
+    "file": "lrt-ft-on-normal.png",
+    "source_filename": "Screenshot 2026-10-07 at 01.06.12.png",
+    "sha256": "be579f0e323798d31dbad714cbc0ae426c217850406ac6cea05680122c813cc9",
+    "algorithm": "least-response-time",
+    "fault_tolerance": true,
+    "scenario": "normal operation before failure",
+    "observed_health": "all three replicas healthy",
+    "successful_queries_shown": 6,
+    "expected_count": 6208,
+    "cumulative_attempts": {
+      "server-1": 4,
+      "server-2": 1,
+      "server-3": 1
+    },
+    "selected_failure_target": "server-1"
+  },
+  {
+    "file": "lrt-ft-on-failure.png",
+    "source_filename": "Screenshot 2026-10-07 at 01.08.24.png",
+    "sha256": "bc2117438acb6113853e6a8fbf49293f1fc100e88147258aaa61fa13b0bcdb6b",
+    "algorithm": "least-response-time",
+    "fault_tolerance": true,
+    "scenario": "replica failure",
+    "target": "server-1",
+    "observed_docker_state": "Exited (137)",
+    "observed_health": "unhealthy",
+    "successful_queries_shown": 6,
+    "expected_count": 6208,
+    "cumulative_attempts": {
+      "server-1": 4,
+      "server-2": 1,
+      "server-3": 7
+    }
+  },
+  {
+    "file": "lrt-ft-on-recovery.png",
+    "source_filename": "Screenshot 2026-10-07 at 01.10.28.png",
+    "sha256": "41f47d25e026261f32d2ac9bb1ec47d1b21ca2d16e3bb0eb50158e78cdf664c0",
+    "algorithm": "least-response-time",
+    "fault_tolerance": true,
+    "scenario": "replica recovery",
+    "target": "server-1",
+    "observed_docker_state": "Up 11 seconds",
+    "observed_health": "healthy",
+    "successful_queries_shown": 6,
+    "expected_count": 6208,
+    "returned_target_query_log_entries": 1,
+    "cumulative_attempts": {
+      "server-1": 5,
+      "server-2": 1,
+      "server-3": 12
+    }
+  }
+]

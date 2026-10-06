@@ -147,7 +147,11 @@ records. Baseline illustration uses the first repetition with an outage error
 (LC r1, LRT r2); FT-on failure/recovery views use r1. The full analysis retains
 all repetitions, including the zero-error LRT baseline.
 
-Terminal screenshots are pending.
+Four [live terminal screenshots](../live-demo-2026-10-07/README.md) show FT-on
+failure and recovery for LC and LRT. An additional LRT preparation screenshot
+records the initial healthy state and target selection. These separate live
+demonstrations supplement the controlled matrix; their query counts and
+timings are not added to its measured totals.
 
 The conclusion is limited to a cache-warmed query at 20 sessions/s, one local
 Docker environment, one failed replica, and three repetitions per condition.
@@ -159,5 +163,4 @@ correctness of every RPC or dependency. Zero observed transition errors under
 FT on does not establish that transition errors are impossible.
 
 The English group-report contribution is in `docs/phase4-report.md`. Remaining
-deliverables are report integration, terminal screenshots and the submission
-archive with the group ID.
+deliverables are report integration and the submission archive with the group ID.

@@ -1,8 +1,9 @@
 # Phase 4 contribution for the group report
 
 Status: implementation and measured-results draft for the group report. The
-12-run matrix is complete and reconciled; actual terminal screenshots remain
-pending. Integrate and shorten this contribution within the shared IEEE
+12-run matrix is complete and reconciled; four live failure/recovery screenshots
+are available for LC and LRT in `results/phase4/live-demo-2026-10-07/`.
+Integrate and shorten this contribution within the shared IEEE
 two-column report: the three-page text limit covers all phases together.
 Detailed qualifications and traceable evidence are in
 `results/phase4/matrix-20261007/analysis.md`.

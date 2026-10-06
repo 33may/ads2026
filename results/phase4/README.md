@@ -11,8 +11,11 @@ Read the baseline qualifications before interpreting the aggregate totals.
 - [Per-run summary](matrix-20261007/summary.csv)
 - [Independent reconciliation](matrix-20261007/validation.json)
 - [Six recorded terminal text views](matrix-20261007/terminal-evidence/README.md)
+- [Live terminal screenshots](live-demo-2026-10-07/README.md)
 
-Terminal screenshots and integration into the group report are pending.
+All four planned live failure/recovery screenshots are available for LC and
+LRT, together with an additional LRT preparation screenshot. Integration into
+the group report is pending.
 
 `practice-20261007/` is the separate, successful LC/FT-on trial used to check the
 runner before the matrix. Its 1,200 queries are excluded from matrix totals.
@@ -24,6 +27,6 @@ the controlled matrix.
 
 Run `make experiment-phase4` to create a new timestamped session with
 raw CSV/JSON, Docker evidence, settings, source provenance, summary tables and
-timelines. See `docs/phase4.md` for the protocol and six terminal screenshots.
+timelines. See `docs/phase4.md` for the experiment protocol and demo commands.
 Keep practice runs clearly identified and use a full 12-run session for the report.
 Do not copy or overwrite Phase 2–3 results here.
