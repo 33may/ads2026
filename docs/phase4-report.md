@@ -7,6 +7,13 @@ Integrate this into the shared IEEE two-column report; its three-page text limit
 covers all phases together. Replace the measured-results instructions with a
 compact paragraph and selected evidence before submission.
 
+Manual FT-on demos for LC and LRT have now been completed. Their operator-pasted
+terminal transcripts are in `results/phase4/manual-demo-2026-10-06/`. Both showed
+six correct queries after exclusion and reuse of the recovered replica; the LRT
+demo showed the returning replica receive one new query before the next five
+went to server-2. These observations establish the demonstrated behavior, not
+detection-time measurements or the results of the full comparison matrix.
+
 ## Failure model and mechanism
 
 The Phase 3 TCP balancer continued to select a stopped replica. In our
