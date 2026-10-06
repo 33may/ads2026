@@ -162,5 +162,7 @@ PING/PONG checks the application's health path and listener readiness, not the
 correctness of every RPC or dependency. Zero observed transition errors under
 FT on does not establish that transition errors are impossible.
 
-The English group-report contribution is in `docs/phase4-report.md`. Remaining
-deliverables are report integration and the submission archive with the group ID.
+The English contribution for ADS Group 44 is in `docs/phase4-report.md`, with
+the matching IEEE section in `docs/phase4-report.tex`. Build the source and
+evidence archive with `make package-phase4 GROUP_ID=44`. Integration into the
+combined group report and validation of its overall page limit remain.

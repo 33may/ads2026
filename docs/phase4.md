@@ -239,21 +239,28 @@ specified scenarios and does not replace analysis of all repetitions.
 
 ## Group handoff
 
+This contribution belongs to **ADS Group 44** (submission group ID: `44`).
+
 Use `docs/phase4-report.md` as the English contribution to the group's IEEE
 two-column report. `docs/phase4-report.tex` provides the same section in the
 standard IEEE conference class, with a standalone preview. Copy the marked
 section into the group's main document. The assignment's **three-page text limit applies to the whole
-group report**, not an extra three-page Phase 4 report. Fill the measured results
-from the recorded matrix and select compact figures jointly with the group.
+group report**, not an extra three-page Phase 4 report. The section already
+includes the measured results from the complete matrix. Select compact figures
+jointly with the group and check the page limit in the combined document.
 Phase 2–3 outputs remain in their existing directories.
 
-Once the group ID is known:
+Build the Phase 4 source and evidence archive for ADS Group 44:
 
 ```bash
-make package-phase4 GROUP_ID=YOUR_GROUP_ID
+make package-phase4 GROUP_ID=44
 ```
 
-This creates `dist/lab-YOUR_GROUP_ID-phase4.zip`, including source, corpus,
+This creates `dist/lab-44-phase4.zip`, including source, corpus,
 example configuration, documentation and Phase 4 evidence. `.git`, `.venv`,
 real `.env` files and private working notes are excluded. A SHA-256 manifest
 records the package contents. Existing archives are not overwritten.
+
+The archive contains the editable Phase 4 report section. The final combined
+IEEE report PDF must be assembled with the other phases by the group; it is
+not part of this source archive.

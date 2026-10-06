@@ -1,7 +1,8 @@
 # Phase 4 report contribution
 
 [IEEE LaTeX section and standalone preview](phase4-report.tex).
-The section below is intended for integration into the group's report.
+The section below is the contribution of **ADS Group 44** for integration into
+the group's combined report.
 Detailed measurements are in [the experiment analysis](../results/phase4/matrix-20261007/analysis.md);
 live figures and captions are in [the screenshot guide](../results/phase4/live-demo-2026-10-07/README.md).
 
