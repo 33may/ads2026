@@ -47,6 +47,11 @@ Behaviour of `get_count`: bump `hot_keywords[keyword]`; look up `(reference, key
 **Load balancer** (`lb/`, image `ads-lb`, Phase 3). Contract fixed here, internals by the implementer:
 - Listens on one TCP port, forwards bytes both ways to one of `server-1..3` without interpreting RPyC.
 - Phase 3: three dynamic algorithms, selectable by name: Least Connections and Least Response Time and Combined.
+- Phase 4 (opt-in): each replica exposes an internal TCP PING/PONG health
+  endpoint in its application process. Independent monitors restrict all three
+  policies to healthy replicas and detect recovery. Before forwarding any user
+  bytes, a failed backend connection can retry another healthy replica. See
+  [Phase 4 design and experiment guide](phase4.md) for thresholds and limits.
 - Exposes the active algorithm, cumulative counters, and per-selection active
   connection snapshots through a separate read-only metrics socket.
 - Phase 3 experiment connections begin with a reserved correlation-ID
@@ -90,7 +95,7 @@ project/
   compose.yml          scenario 1: redis, minio, server-1
   compose.cluster.yml  scenario 2: redis, minio, server-1..3, lb (Phase 3)
   .env                 ports, MinIO credentials, defaults
-  Makefile             every operator and demo command (see Operations)
+  Makefile             service and demo commands (see Operations)
   server/              image ads-server
     Dockerfile
     requirements.txt   rpyc, redis, boto3
@@ -116,7 +121,7 @@ project/
       summary.tsv      combined Phase 2+3 statistics
 ```
 
-`results/` is committed so figures in the report are reproducible from the CSVs. `CLAUDE.md` and `.claude/` stay gitignored.
+`results/` is committed so figures in the report are reproducible from the CSVs.
 
 ## Deployment
 
@@ -139,7 +144,7 @@ published `localhost:18861`; in either case the client API is unchanged.
 
 ## Operations and demo
 
-Everything an operator or a debrief needs is a `make` target, run from `project/`. The client targets are thin wrappers around the `client/` package.
+Service and demo commands are available as `make` targets, run from the repository root. The client targets call the `client/` package.
 
 Cluster
 - `make up` / `make up-cluster` — start scenario 1 / scenario 2 (builds images if needed)

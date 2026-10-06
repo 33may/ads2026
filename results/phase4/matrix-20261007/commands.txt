@@ -1,0 +1,145 @@
+
+$ docker compose --env-file /Users/emirdikmen/Codes/arch_project/.env -f /Users/emirdikmen/Codes/arch_project/compose.cluster.yml build
+[1791324979.765055 .. 1791324981.353714]
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.30kB done
+#1 DONE 0.0s
+
+#2 [client internal] load build definition from Dockerfile
+#2 transferring dockerfile: 302B done
+#2 DONE 0.0s
+
+#3 [server-3 internal] load build definition from Dockerfile
+#3 transferring dockerfile: 195B done
+#3 DONE 0.0s
+
+#4 [lb internal] load build definition from Dockerfile
+#4 transferring dockerfile: 146B done
+#4 DONE 0.0s
+
+#5 [server-1 internal] load metadata for docker.io/library/python:3.12-slim
+#5 DONE 0.5s
+
+#6 [lb internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [server-1 internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#8 [client internal] load .dockerignore
+#8 transferring context: 2B done
+#8 DONE 0.0s
+
+#9 [lb internal] load build context
+#9 transferring context: 39B done
+#9 DONE 0.0s
+
+#10 [server-3 internal] load build context
+#10 transferring context: 293B done
+#10 DONE 0.0s
+
+#11 [client internal] load build context
+#11 transferring context: 478B done
+#11 DONE 0.0s
+
+#12 [server-1 1/3] FROM docker.io/library/python:3.12-slim@sha256:05cda9777409a9c3ffddd94a4c476b79f0769a0b4857f0c7ed9226b6800b0d6f
+#12 resolve docker.io/library/python:3.12-slim@sha256:05cda9777409a9c3ffddd94a4c476b79f0769a0b4857f0c7ed9226b6800b0d6f 0.0s done
+#12 DONE 0.0s
+
+#13 [client 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#13 CACHED
+
+#14 [client 3/5] COPY requirements.txt .
+#14 CACHED
+
+#15 [lb 3/3] COPY load_balancer.py .
+#15 CACHED
+
+#16 [client 5/5] COPY . ./client
+#16 CACHED
+
+#17 [server-2 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#17 CACHED
+
+#18 [server-2 2/3] WORKDIR /app
+#18 CACHED
+
+#19 [server-2 3/5] COPY requirements.txt .
+#19 CACHED
+
+#20 [server-2 5/5] COPY . .
+#20 CACHED
+
+#21 [lb] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:250f6070fdc94de561be7744730004ded13f6bf4872e12dce3cafa9b7a1b0f62 done
+#21 exporting config sha256:dfe9fe73af9a4edb0566160f40275817303ac0d4b2286379f69a7bf9c2b47caf done
+#21 exporting attestation manifest sha256:9382e219838acb1aa0ab66ad4e438463967d925ee248e93dd9979614adf1a035 0.0s done
+#21 exporting manifest list sha256:a491a39a2688287287ec896032bd20a54ab3114ab0918143c11188e610a867d2 0.0s done
+#21 naming to docker.io/library/ads-lb:latest
+#21 naming to docker.io/library/ads-lb:latest 0.0s done
+#21 unpacking to docker.io/library/ads-lb:latest done
+#21 DONE 0.1s
+
+#22 [server-1] exporting to image
+#22 exporting layers done
+#22 exporting manifest sha256:19e85c6756b136a4a44b471b80affe3bba51cb5f91766889b8227143a7c6fb62 done
+#22 exporting config sha256:f8a9aaf7313b5b6384305b91fb3b491a0136a5375f888d6a02e3c3ea0720029d done
+#22 exporting attestation manifest sha256:de6e025bbcb097f02199cc70f9690db0c33c3cf31d163a239d08f107a08f8526 0.0s done
+#22 exporting manifest list sha256:dd19d58f63b13b10791739f2c56ac44f9ca7633a63d20240864fdd414865f87d 0.0s done
+#22 naming to docker.io/library/ads-server:latest done
+#22 unpacking to docker.io/library/ads-server:latest done
+#22 DONE 0.1s
+
+#23 [server-3] exporting to image
+#23 exporting layers done
+#23 exporting manifest sha256:fe04782c66c2e2a23702e30731a687886f0fa2e9314c9033499852f3ef0caac9 done
+#23 exporting config sha256:634f42010dd980b79a4d5511626f183d083e2c63db04a4033fe4603c8e7dbee8 done
+#23 exporting attestation manifest sha256:2b23bbeffbe626108cb563b049651f4787c5c3420a6a216ac5cd29090644d558 0.0s done
+#23 exporting manifest list sha256:5a117bd57683c2e8eee2fe2cfae3f185a870ed7336fb25f48832439b98518585 0.0s done
+#23 naming to docker.io/library/ads-server:latest done
+#23 unpacking to docker.io/library/ads-server:latest done
+#23 DONE 0.1s
+
+#24 [client] exporting to image
+#24 exporting layers done
+#24 exporting manifest sha256:b65673a9136e26b6f8ac48ddfe0129fd63ef603c3a729a6e21fefcbd87752990 done
+#24 exporting config sha256:0e29ceb4d86f1f89622f251cddb2370a42fbf120084f31f75a6b5d09d707da21 done
+#24 exporting attestation manifest sha256:64507afcc1bdd38a2b7e36dfb2d76141517f2729c8b301867ad82b8432d4a18d 0.0s done
+#24 exporting manifest list sha256:fa122d7c4c7ef50365bcc6e3e97db77255ba5b0f2b6eb6bfcd1a98a1c897d7bd 0.0s done
+#24 naming to docker.io/library/ads-client:latest done
+#24 unpacking to docker.io/library/ads-client:latest done
+#24 DONE 0.1s
+
+#25 [server-2] exporting to image
+#25 exporting layers done
+#25 exporting manifest sha256:66d68882923f8d2153a97cae589602eeefbfa2557450c458686a700c6779f4c8 done
+#25 exporting config sha256:a014db89dd88a93955fdd12032e9c0821cb6c569c86210741e6d8c7339c8592c done
+#25 exporting attestation manifest sha256:975844b19e46081472690856ed6b43f23c103dbfc9eb664e4b7cfd442eb4751d 0.0s done
+#25 exporting manifest list sha256:4bac34b36faf43ed2028d7d0ad4fd0f319fa914b66652b4be4e54e782b9ffe11 0.0s done
+#25 naming to docker.io/library/ads-server:latest done
+#25 unpacking to docker.io/library/ads-server:latest done
+#25 DONE 0.1s
+
+#26 [server-1] resolving provenance for metadata file
+#26 DONE 0.0s
+
+#27 [server-3] resolving provenance for metadata file
+#27 DONE 0.0s
+
+#28 [lb] resolving provenance for metadata file
+#28 DONE 0.0s
+
+#29 [client] resolving provenance for metadata file
+#29 DONE 0.0s
+
+#30 [server-2] resolving provenance for metadata file
+#30 DONE 0.0s
+ ads-server  Built
+ ads-server  Built
+ ads-server  Built
+ ads-lb  Built
+ ads-client  Built
+

@@ -1,0 +1,13 @@
+run,policy,ft,repetition,complete,target,requests,expected_requests,successes,failures,wrong_answers,uncorrelated_successes,p95_latency_ms,p95_schedule_lag_ms,observed_detection_s,observed_recovery_s,unhealthy_selection_violations,stable_down_requests,stable_down_failures,successful_requests_on_returned_target,sample_interval_s,acceptance
+least-connections-ft-off-r1,least-connections,off,1,True,server-2,1200,1200,1061,139,0,0,20.13425002223812,5.333185195922852,,,0,0,0,126,1,baseline
+least-connections-ft-off-r2,least-connections,off,2,True,server-2,1200,1200,1061,139,0,0,20.293875015340745,5.340814590454102,,,0,0,0,127,1,baseline
+least-connections-ft-off-r3,least-connections,off,3,True,server-3,1200,1200,1199,1,0,0,18.847166997147724,5.284786224365234,,,0,0,0,25,1,baseline
+least-connections-ft-on-r1,least-connections,on,1,True,server-1,1200,1200,1200,0,0,0,18.930874997749925,5.716085433959961,0.3363778591156006,3.0413990020751953,0,393,0,119,1,pass
+least-connections-ft-on-r2,least-connections,on,2,True,server-1,1200,1200,1200,0,0,0,19.07554201898165,5.347013473510742,0.3349471092224121,3.0199413299560547,0,392,0,119,1,pass
+least-connections-ft-on-r3,least-connections,on,3,True,server-1,1200,1200,1200,0,0,0,19.06041699112393,5.319833755493164,0.33257031440734863,3.0366880893707275,0,393,0,118,1,pass
+lrt-ft-off-r1,lrt,off,1,True,server-2,1200,1200,1200,0,0,0,18.644041992956772,5.306005477905273,,,0,0,0,200,1,baseline
+lrt-ft-off-r2,lrt,off,2,True,server-2,1200,1200,1002,198,0,0,18.086207972373813,5.265951156616211,,,0,0,0,82,1,baseline
+lrt-ft-off-r3,lrt,off,3,True,server-2,1200,1200,955,245,0,0,18.94874998833984,5.3081512451171875,,,0,0,0,81,1,baseline
+lrt-ft-on-r1,lrt,on,1,True,server-2,1200,1200,1200,0,0,0,18.063416006043553,5.2738189697265625,0.3361032009124756,3.0296339988708496,0,392,0,161,1,pass
+lrt-ft-on-r2,lrt,on,2,True,server-3,1200,1200,1200,0,0,0,18.160083011025563,5.293130874633789,0.36925482749938965,3.0227270126342773,0,393,0,113,1,pass
+lrt-ft-on-r3,lrt,on,3,True,server-3,1200,1200,1200,0,0,0,17.46937501593493,5.257844924926758,2.9935057163238525,3.01583194732666,0,340,0,122,1,pass

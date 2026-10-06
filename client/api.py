@@ -47,8 +47,14 @@ class Client:
             except Exception:
                 stream.close()
                 raise
-        self.local_port = self._conn._channel.stream.sock.getsockname()[1]
-        self._svc = self._conn.root
+        try:
+            self.local_port = self._conn._channel.stream.sock.getsockname()[1]
+            self._svc = self._conn.root
+        except BaseException:
+            # A backend can disappear during GETROOT, before the caller gets
+            # a Client/context manager. Do not leak that half-open session.
+            self._conn.close()
+            raise
         self.last_ms = None          # client-observed latency of the last get_count
 
     # --- client API (C1) ---

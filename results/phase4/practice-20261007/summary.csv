@@ -1,0 +1,2 @@
+run,policy,ft,repetition,complete,target,requests,expected_requests,successes,failures,wrong_answers,uncorrelated_successes,p95_latency_ms,p95_schedule_lag_ms,observed_detection_s,observed_recovery_s,unhealthy_selection_violations,stable_down_requests,stable_down_failures,successful_requests_on_returned_target,sample_interval_s,acceptance
+least-connections-ft-on-r1,least-connections,on,1,True,server-3,1200,1200,1200,0,0,0,19.682540994836017,5.29789924621582,0.9977779388427734,3.0359532833099365,0,379,0,117,1,pass

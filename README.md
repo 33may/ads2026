@@ -2,6 +2,13 @@
 
 Architecture and interfaces: `docs/architecture.md`.
 
+Phase 4 replica failure detection, Docker demo, recorded experiments and group
+handoff: [Phase 4 guide](docs/phase4.md). It is opt-in with `FT=on`; the default
+`FT=off` keeps the Phase 3 comparison available.
+
+ADS Group 44's [Phase 4 report draft](docs/phase4-report.md) collects the method
+and results for use when writing the combined group report.
+
 ## Setup
 
 The client, server, load balancer, Redis, and MinIO are all declared as Compose
@@ -73,10 +80,12 @@ the experiment runner; this does not alter the proxied RPyC stream.
 
 The proxy can also be run directly with `python lb/load_balancer.py --algorithm lrt`.
 
-Run the fast Phase 3 regression tests with `make test-phase3`. They verify the
-default policy, LC load/tie behavior, LRT bootstrap/selection behavior, the
-assignment's five-rate constraints, and byte-exact forwarding of a payload
-larger than 64 KiB through real asyncio TCP sockets.
+Run the current regression suite with `make test-phase4` after installing
+`client/requirements.txt` in `.venv` (see the [test setup](docs/phase4.md#automated-checks-without-docker)).
+It covers LC/LRT selection with fault tolerance disabled, health filtering and
+recovery, and byte-exact forwarding of payloads larger than 64 KiB with FT on
+and off. The pre-existing `test-phase3` target references test modules that are
+absent from this repository.
 
 MinIO console: http://localhost:19001
 

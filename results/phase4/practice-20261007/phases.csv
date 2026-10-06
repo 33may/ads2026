@@ -1,0 +1,4 @@
+run,phase,requests,failures,p95_latency_ms
+least-connections-ft-on-r1,normal,401,0,18.317334004677832
+least-connections-ft-on-r1,fault,399,0,22.062167001422495
+least-connections-ft-on-r1,recovery,400,0,20.36058300291188

@@ -1,0 +1,23 @@
+PHASE 4 | least-connections | FT=off | repetition=1 | off-failure
+Source: results/phase4/matrix-20261007/least-connections-ft-off-r1
+Recorded experiment evidence; this command does not run a new live test.
+Target: server-2 | Query: the / mansfield-park | Expected: 6208
+SIGKILL command started: 2026-10-06T22:16:47.992+00:00
+Start command began:     2026-10-06T22:17:07.968+00:00
+Entire run: 1200 requests, 139 errors
+This phase: 400 requests, 132 errors
+
+Docker recorded failed state: server-2 exited, exit code 137
+Balancer snapshot at 2026-10-06T22:16:48.312+00:00
+SERVER       HEALTH     ACTIVE  ATTEMPTS
+server-1     disabled        0       136
+server-2     disabled        0       136
+server-3     disabled        0       136
+First six failed requests during the outage:
+ ELAPSED   RESULT BACKEND / ATTEMPTS       ERROR
+ 20.255s    ERROR server-2                 EOFError: connection closed by peer
+ 20.404s    ERROR server-2                 EOFError: connection closed by peer
+ 20.552s    ERROR server-2                 EOFError: connection closed by peer
+ 20.704s    ERROR server-2                 EOFError: connection closed by peer
+ 20.852s    ERROR server-2                 EOFError: connection closed by peer
+ 21.005s    ERROR server-2                 EOFError: connection closed by peer
