@@ -240,7 +240,9 @@ specified scenarios and does not replace analysis of all repetitions.
 ## Group handoff
 
 Use `docs/phase4-report.md` as the English contribution to the group's IEEE
-two-column report. The assignment's **three-page text limit applies to the whole
+two-column report. `docs/phase4-report.tex` provides the same section in the
+standard IEEE conference class, with a standalone preview. Copy the marked
+section into the group's main document. The assignment's **three-page text limit applies to the whole
 group report**, not an extra three-page Phase 4 report. Fill the measured results
 from the recorded matrix and select compact figures jointly with the group.
 Phase 2–3 outputs remain in their existing directories.

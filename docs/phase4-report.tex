@@ -1,46 +1,54 @@
-# Phase 4 report contribution
+% Standalone IEEE preview. Copy the section between the markers into the group report.
+\documentclass[conference]{IEEEtran}
 
-[IEEE LaTeX section and standalone preview](phase4-report.tex).
-The section below is intended for integration into the group's report.
-Detailed measurements are in [the experiment analysis](../results/phase4/matrix-20261007/analysis.md);
-live figures and captions are in [the screenshot guide](../results/phase4/live-demo-2026-10-07/README.md).
+\begin{document}
+\setcounter{section}{3}
 
-## Load Balancing with Fault Tolerance
+% BEGIN PHASE 4 SECTION
+\section{Load Balancing with Fault Tolerance}
+\label{sec:phase4}
 
-### Failure detection and recovery
-
-Without health monitoring, the Phase 3 balancer could select a stopped replica,
-causing `EOFError` during RPyC connection setup. We added bounded ping/echo
+\subsection{Failure Detection and Recovery}
+Without health monitoring, the Phase~3 balancer could select a stopped replica,
+causing \texttt{EOFError} during RPyC connection setup. We added bounded ping/echo
 detection, following the course's treatment of replication, timeouts and
-ping/echo (Fault Tolerance slides 22, 27–28).
+ping/echo (Fault Tolerance slides~22, 27--28).
 
-Each replica process answers TCP `PING` with `PONG` once its RPC listener is
-ready. Independent checks run every 1 s with a 0.5 s exchange timeout. Two
-consecutive failures exclude a replica; two successes admit it. Unknown
+Each replica process answers TCP \texttt{PING} with \texttt{PONG} once its RPC
+listener is ready. Independent checks run every 1~s with a 0.5~s exchange timeout.
+Two consecutive failures exclude a replica; two successes admit it. Unknown
 replicas are ineligible, and excluded replicas remain under observation.
 Least Connections (LC) and Least Response Time (LRT) select only healthy
 replicas; probes do not affect their load measurements.
 
 A failed backend connection also triggers immediate exclusion. Connection
-attempts time out after 0.5 s; another healthy replica may be tried only before
+attempts time out after 0.5~s; another healthy replica may be tried only before
 application data is forwarded. Recovery preserves active counts and resets
 the replica's LRT latency estimate, enabling a fresh sample.
 
-### Evaluation
-
+\subsection{Evaluation}
 We ran LC/LRT with fault tolerance (FT) off/on, three repetitions each:
 12 runs and 14,400 queries. Each run used fresh application containers, fixed
-images and a warmed cache for `the / mansfield-park` (expected count 6208).
-At 20 queries/s, runs comprised 20 s normal operation, 20 s outage and 20 s
+images and a warmed cache for \texttt{the / mansfield-park} (expected count 6208).
+At 20 queries/s, runs comprised 20~s normal operation, 20~s outage and 20~s
 recovery. We killed the replica most selected in the preceding five seconds,
-then restarted it. The table includes all transition errors.
+then restarted it. Table~\ref{tab:phase4-failures} includes all transition errors.
 
-| Policy | FT | Failures r1 / r2 / r3 | Total / 3,600 |
-| --- | --- | --- | ---: |
-| LC | off | 139 / 139 / 1 | 279 |
-| LC | on | 0 / 0 / 0 | 0 |
-| LRT | off | 0 / 198 / 245 | 443 |
-| LRT | on | 0 / 0 / 0 | 0 |
+\begin{table}[!ht]
+\caption{Query failures (1,200 requests per repetition).}
+\label{tab:phase4-failures}
+\centering
+\begin{tabular}{lccc}
+\hline
+Policy & FT & Failures ($r_1/r_2/r_3$) & Total / 3,600 \\
+\hline
+LC  & off & 139 / 139 / 1 & 279 \\
+LC  & on  & 0 / 0 / 0 & 0 \\
+LRT & off & 0 / 198 / 245 & 443 \\
+LRT & on  & 0 / 0 / 0 & 0 \\
+\hline
+\end{tabular}
+\end{table}
 
 All 7,200 FT-on queries returned 6208; no unhealthy replica was selected.
 Every recovered target served new queries. Five runs excluded the target on
@@ -53,9 +61,11 @@ steered LC away from its failed target in one run. In one LRT run, the preferred
 replica changed before the fault; later runs reselected a stopped replica using
 its stale latency estimate. All repetitions are retained.
 
-### Scope
-
+\subsection{Scope}
 These results cover one replica failure under the stated workload. Health checks
 indicate process responsiveness, not dependency correctness. Requests already
 forwarded are not replayed, and transition errors remain possible. Balancer,
 Redis and MinIO failures are outside scope.
+% END PHASE 4 SECTION
+
+\end{document}
