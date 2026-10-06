@@ -1,0 +1,27 @@
+PHASE 4 | lrt | FT=on | repetition=1 | on-recovery
+Source: results/phase4/matrix-20261007/lrt-ft-on-r1
+Recorded experiment evidence; this command does not run a new live test.
+Target: server-2 | Query: the / mansfield-park | Expected: 6208
+SIGKILL command started: 2026-10-06T22:27:02.547+00:00
+Start command began:     2026-10-06T22:27:22.514+00:00
+Entire run: 1200 requests, 0 errors
+This phase: 400 requests, 0 errors
+
+Docker recorded final state: server-2 running, exit code 0
+Balancer snapshot at 2026-10-06T22:27:25.543+00:00
+SERVER       HEALTH     ACTIVE  ATTEMPTS
+server-1     healthy         0       461
+server-2     healthy         0       302
+server-3     healthy         0       100
+Recorded target health transitions:
+  2026-10-06T22:26:41.664+00:00 unknown -> healthy (ping/pong)
+  2026-10-06T22:27:02.663+00:00 healthy -> unhealthy (connect: ConnectionRefusedError)
+  2026-10-06T22:27:24.668+00:00 unhealthy -> healthy (ping/pong)
+First correct requests on the returned target:
+ ELAPSED   RESULT BACKEND / ATTEMPTS       ERROR
+ 42.205s     6208 server-2                 -
+ 46.055s     6208 server-2                 -
+ 46.101s     6208 server-2                 -
+ 46.155s     6208 server-2                 -
+ 46.204s     6208 server-2                 -
+ 46.255s     6208 server-2                 -

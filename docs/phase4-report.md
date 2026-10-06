@@ -1,18 +1,11 @@
 # Phase 4 contribution for the group report
 
-Status: implementation text below is ready for editing. The controlled Docker
-matrix and six terminal screenshots must still be collected by the operator.
-Do not represent the preliminary manual observation as a controlled experiment.
-Integrate this into the shared IEEE two-column report; its three-page text limit
-covers all phases together. Replace the measured-results instructions with a
-compact paragraph and selected evidence before submission.
-
-Manual FT-on demos for LC and LRT have now been completed. Their operator-pasted
-terminal transcripts are in `results/phase4/manual-demo-2026-10-06/`. Both showed
-six correct queries after exclusion and reuse of the recovered replica; the LRT
-demo showed the returning replica receive one new query before the next five
-went to server-2. These observations establish the demonstrated behavior, not
-detection-time measurements or the results of the full comparison matrix.
+Status: implementation and measured-results draft for joint group review. The
+12-run matrix is complete and reconciled; actual terminal screenshots remain
+pending. Integrate and shorten this contribution within the shared IEEE
+two-column report: the three-page text limit covers all phases together.
+Detailed qualifications and traceable evidence are in
+`results/phase4/matrix-20261007/analysis.md`. No publication is implied.
 
 ## Failure model and mechanism
 
@@ -41,26 +34,44 @@ and are never replayed. Health generations reject stale asynchronous results;
 recovery preserves active-session counts and clears the returning replica's
 LRT estimate so it can obtain a fresh sample.
 
-## Experimental method and results to insert
+## Experimental method and measured results
 
-Compare LC and LRT with fault tolerance disabled/enabled, using three repetitions
-per condition (12 runs). Warm the shared cache for `the / mansfield-park`, then
-issue 20 queries/s through the existing client API. Each run includes 20 s normal
-operation, 20 s replica outage and 20 s recovery. Select the most-used replica
-in the last five seconds of the normal stage, resolving ties by name; stop it
-with SIGKILL and subsequently restart it. Recreate replicas and balancer before
-each run while retaining the book volume.
+We compared LC/LRT with FT off/on over three repetitions per condition: 12 runs,
+14,400 queries. Each run used fresh application containers and the same images,
+with a warmed shared cache for `the / mansfield-park` (expected count 6208).
+At 20 new client sessions/s, each run comprised 20 s normal operation, 20 s
+replica outage and 20 s recovery. The most-selected replica in the preceding
+five seconds was killed with SIGKILL and subsequently restarted. Ties were
+resolved by name; book storage persisted.
 
-**After running:** report per-condition failures during normal, fault and recovery
-stages; include transition failures. State the targets and repetitions, observed
-detection/recovery delays, any stable-down failures, and successful queries on
-the returned replica. Use the recorded `summary.csv`, `phases.csv` and timelines.
-Explain any `needs-review` outcome instead of omitting it. The controller samples
-nominally once per second; observed delays are measured from control-command
-start and include polling and command-duration uncertainty. Report actual sample
-gaps when material. LRT is not expected to divide traffic equally. Select six
-genuine terminal screenshots across LC/LRT: baseline failure, fault-tolerant
-operation during failure, and recovery.
+| Algorithm | FT | Errors in r1 / r2 / r3 | Total errors / queries |
+| --- | --- | --- | --- |
+| LC | off | 139 / 139 / 1 | 279 / 3,600 |
+| LC | on | 0 / 0 / 0 | 0 / 3,600 |
+| LRT | off | 0 / 198 / 245 | 443 / 3,600 |
+| LRT | on | 0 / 0 / 0 | 0 / 3,600 |
+
+No normal-stage queries failed. LC/off produced 266 outage and 13 recovery
+errors; LRT/off produced 408 outage and 35 recovery errors. All transition errors
+are included. All six FT-on runs passed: 7,200 correct replies, no unhealthy
+backend selections, no failures in the 2,303 observed stable-down requests,
+and 752 correct replies on recovered targets.
+
+Five FT-on runs excluded the replica on a failed backend connection and retried
+one query successfully before forwarding; one LRT run detected failure via
+periodic probes. First-observed exclusion delays were 0.333–0.369 s for the
+connection-triggered cases and 2.994 s for the probe-triggered case. All returns
+used PING/PONG; observed readmission took 3.016–3.041 s. These delays start at
+the Docker command, include command/polling uncertainty, and are not detection
+bounds. Polling was nominally 1 Hz; maximum gaps reached 1.879 s.
+
+Baseline variation matters. LC/off r3 had one 4 s client timeout while a backend
+connection stayed pending for 36 s; its active reservation incidentally steered
+LC toward idle survivors. In LRT/off r1, the preferred backend changed before
+SIGKILL, so the historical target rule did not fault the current winner.
+LRT/off r2–r3 later reselected the stopped replica using its stale latency
+estimate and failed. All repetitions are retained; these differences qualify
+the comparison rather than establish reliability of the FT-off algorithms.
 
 ## Scope and limits
 

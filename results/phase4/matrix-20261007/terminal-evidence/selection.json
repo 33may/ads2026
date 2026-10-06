@@ -1,0 +1,38 @@
+[
+  {
+    "file": "lc-off-failure.txt",
+    "policy": "lc",
+    "scenario": "off-failure",
+    "repetition": 1
+  },
+  {
+    "file": "lc-on-failure.txt",
+    "policy": "lc",
+    "scenario": "on-failure",
+    "repetition": 1
+  },
+  {
+    "file": "lc-on-recovery.txt",
+    "policy": "lc",
+    "scenario": "on-recovery",
+    "repetition": 1
+  },
+  {
+    "file": "lrt-off-failure.txt",
+    "policy": "lrt",
+    "scenario": "off-failure",
+    "repetition": 2
+  },
+  {
+    "file": "lrt-on-failure.txt",
+    "policy": "lrt",
+    "scenario": "on-failure",
+    "repetition": 1
+  },
+  {
+    "file": "lrt-on-recovery.txt",
+    "policy": "lrt",
+    "scenario": "on-recovery",
+    "repetition": 1
+  }
+]

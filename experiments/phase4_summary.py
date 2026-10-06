@@ -93,13 +93,14 @@ def plot_timeline(directory, rows, run, times, samples):
     axes[0].bar(seconds, [failed[s] for s in seconds], bottom=[ok[s] for s in seconds],
                 label="Errors / wrong answers", color="#ce554c")
     axes[0].set_ylabel("Requests / second")
-    axes[0].legend(loc="upper right")
+    axes[0].legend(loc="lower left", bbox_to_anchor=(0, 1.01), ncol=2, frameon=False)
+    axes[0].set_ylim(0, max((ok[s] + failed[s] for s in seconds), default=1) * 1.18)
     colors = dict(zip(("server-1", "server-2", "server-3"), ("#246eaf", "#b58425", "#884b9e")))
     for name, color in colors.items():
         counts = Counter(int(r["elapsed_s"]) for r in rows if r["backend"] == name and r["success"])
         axes[1].plot(list(seconds), [counts[s] for s in seconds], label=name, color=color)
     axes[1].set_ylabel("Correct replies / server / s")
-    axes[1].legend(loc="upper right")
+    axes[1].legend(loc="lower left", bbox_to_anchor=(0, 1.01), ncol=3, frameon=False)
     health = {"unknown": 0, "unhealthy": 1, "healthy": 2}
     for name in (run["target"],):
         values = [(s["observed_at"] - run["epoch"], health[b["health"]]) for s in samples
@@ -109,6 +110,9 @@ def plot_timeline(directory, rows, run, times, samples):
                          label=name, color=colors.get(name), linewidth=2)
     axes[2].set_yticks([0, 1, 2], ["unknown", "unhealthy", "healthy"])
     axes[2].set_ylabel(f"Observed target health ({run['target']})")
+    if run["ft"] == "off":
+        axes[2].set_yticks([2], ["eligible\n(unverified)"])
+        axes[2].set_ylabel(f"Target eligibility ({run['target']})")
     axes[2].set_ylim(-.15, 2.15)
     axes[2].set_xlabel("Seconds since load start (request start time for counts)")
     for ax in axes:
@@ -149,7 +153,7 @@ def summarize(root):
              "polling is nominally 1 Hz. Inspect metrics.jsonl for actual gaps and command times "
              "in events.jsonl. This is not millisecond-accurate failure detection latency.", "",
              "All request errors, including transitions, are included. Latency includes connection setup, "
-             "GETROOT and the query. LRT's internal first-byte EWMA is a different metric.", "",
+              "GETROOT, the query and connection cleanup. LRT's internal first-byte EWMA is a different metric.", "",
              "| Run | Target | Requests | Errors | Detection (s) | Recovery (s) | Acceptance |",
              "| --- | --- | ---: | ---: | ---: | ---: | --- |"]
     session_path = root / "session.json"

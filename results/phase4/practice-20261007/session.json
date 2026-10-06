@@ -1,0 +1,50 @@
+{
+  "source_commit": "d24a7b67cce19bbcd84249c46a06d55e6e23c3e3",
+  "source_dirty": false,
+  "source_hashes": {
+    "server/cache.py": "2437826f7db62dc2c1039ad8e3759c4f67bd3c5c6fca71fe0296475efb2c832c",
+    "server/health.py": "5a2580d21b3f9c912298dcc8034b0a7367a836956f8722d19f68c5016d2936e9",
+    "server/log.py": "b9d2a56b27f46b9bef50209236d23c668c4c74beef63c845b88bda325fdff48d",
+    "server/service.py": "ef5a39b9468855e2144b2709baa1d842736222f1c1839d621d6bf18fa8d338bc",
+    "server/store.py": "aec71200ae473611e55eb12c3163b795cfa8758c8da6d893a8859abdbe95f818",
+    "lb/__init__.py": "fd65a9b97b32ca859a29b3429dcd26b53a2254deb31df97b17a36d7939f311d8",
+    "lb/load_balancer.py": "941686e8c0be1064821f705359ad5511f8a46d0a7f37615a638d3472de026123",
+    "client/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "client/api.py": "128f6bb48d087596d69e08c846eb64dc7d036b3f9ac011eec63286e90ab24c5b",
+    "client/cli.py": "20b48829b1ff24c849d88ff9e45d8e6c3851ebdfb417d75fb5f17c1f3dc34186",
+    "client/devcli.py": "5b7bc370d27d6c2b8184d31ace213590283d83c4b0e50bacb834818952bbae93",
+    "client/loadgen.py": "762498f6ae928ee28f812e46edaeb2f5848b227435dc8b08b45cfed74e500a36",
+    "client/plot.py": "4229e19876f381dc4a52c8f29f501cc6640af8717dc92395ee16ac0b43e5b3ba",
+    "experiments/health_status.py": "635b9de5b03653995b716231b9ebb91d912830da963bd47ce24754760eda4e4e",
+    "experiments/package_phase4.py": "ed60fec7c45ad48d075dc2e005501b714bbb5c959131e04d5dc6ed5e41e761b5",
+    "experiments/phase2.py": "fb6508e10c67caa8028ee24d3876f341777feb06ccdf9abbf6c914223894ed95",
+    "experiments/phase3.py": "abf4a1fbd9faf09c46e05c8880ff9e2a670c7619d1ee0a02fce0631c29c1423f",
+    "experiments/phase4.py": "29acbf14fdf032dbffce31f033026addeba3a00bd2b4211bf3b90a56f1a8bd26",
+    "experiments/phase4_summary.py": "24ffdc160aba1ae7d246a7381e41aabe63722e2186b4768179a7b93d950d7fdc",
+    "compose.cluster.yml": "f6b5749e2ce24358dd360828dfcc7fb7f57fe14d998a9193e7f92a8373910dba",
+    ".env.example": "03a6116687ea4e944332c63cdd134c5f848298299ccd1f11e35f07a3acba0978",
+    "Makefile": "3ad44a24eea17532ec174e6c9c9d8300fec4ed22486882101ce32c7b5d1bcae3",
+    "texts/gutenberg/mansfield-park.txt": "079bd9dac8531c97fc5ef7c9cca877a8687ccd149ad53d8697cf0ab8ff2ab015"
+  },
+  "matrix": [
+    [
+      "least-connections",
+      "on",
+      1
+    ]
+  ],
+  "python": "3.14.2 (main, Dec  5 2025, 16:49:16) [Clang 17.0.0 (clang-1700.6.3.2)]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "dependencies": {
+    "rpyc": "6.0.2",
+    "matplotlib": "3.11.2"
+  },
+  "cpu_count": 10,
+  "max_workers": 128,
+  "rate": 20,
+  "stage_seconds": 20,
+  "keyword": "the",
+  "reference": "mansfield-park",
+  "expected": 6208,
+  "sample_interval_s": 1
+}

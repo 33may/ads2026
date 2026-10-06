@@ -127,7 +127,7 @@ The pre-existing `test-phase3` target references test modules absent from the
 baseline repository; Phase 3 policy and forwarding regressions are checked by
 `test-phase4` instead.
 
-## Recorded experiment — run by the operator
+## Recorded experiment
 
 ```bash
 make experiment-phase4 ARGS=--dry-run   # inspect the matrix; no Docker changes
@@ -145,8 +145,11 @@ on all replicas, plus health admission when FT is on.
 The default matrix is **LC/LRT × FT off/on × three repetitions**, at 20 queries/s.
 Each run schedules 20 s normal traffic, 20 s with one replica stopped, and 20 s
 recovery. At the first boundary it chooses the replica with the most selections
-in the preceding five seconds, breaking ties alphabetically. This avoids testing
-an unused LRT replica. It records the target and sends `SIGKILL`; at the second
+in the preceding five seconds, breaking ties alphabetically. This reduces the
+risk of targeting an unused replica, but LRT may switch to another preferred
+replica before the kill. Inspect the actual routing at the boundary; a zero-error
+baseline is not automatically evidence of failure tolerance.
+It records the target and sends `SIGKILL`; at the second
 boundary it sends `start`. The independent load scheduler continues through
 these Docker commands. Stage labels use recorded command-start times, since
 container state changes are not instantaneous.
@@ -163,6 +166,12 @@ Other useful invocations:
 make experiment-phase4 ARGS='--policies least-connections --ft on --repetitions 1'
 # Regenerate derived tables and plots from a recorded session.
 make experiment-phase4 ARGS='--summarize results/phase4/SESSION'
+# Independently reconcile the complete matrix against its raw records.
+.venv/bin/python experiments/audit_phase4.py results/phase4/SESSION
+# Compare all repetitions, after reconciliation passes.
+.venv/bin/python experiments/phase4_comparison.py results/phase4/SESSION
+# Export six compact, explicitly labelled views of recorded terminal evidence.
+.venv/bin/python experiments/phase4_evidence.py results/phase4/SESSION --export-all
 ```
 
 `--rate`, `--stage-seconds`, `--env-file` and `--output` are configurable.
@@ -196,6 +205,10 @@ the corresponding Docker command-start time. Sampling is nominally **one second*
 actual timestamps and gaps are preserved. Command durations, scheduler delay
 and polling contribute uncertainty. Exact balancer transition timestamps are
 also available but are distinct from the controller's observations.
+Inspect the transition reason as well: `connect: ...` means a failed user-backend
+connection caused immediate exclusion. This is not the two-failed-PING path.
+Recovery via `ping/pong` demonstrates active readmission. Neither observed delay
+is a universal failure-detection bound.
 
 Acceptance for FT on requires a complete request count, no selection of a
 non-healthy backend, successful requests in the stable-down interval, and at
@@ -211,7 +224,11 @@ the returned server handling a query. Include the command, algorithm/FT mode,
 `results/phase4/SESSION/screenshots/`, with names such as `lc-ft-on-recovery.png`.
 Do not substitute generated images or plots for terminal screenshots. Record
 which manual demo/run each image represents. No screenshots or measurements
-are claimed before the operator actually runs the demos.
+are claimed before the demos and captures actually occur. The evidence viewer
+prints historical records, not a new live test. Its `--export-all` baseline views
+use the first repetition with an outage failure, while FT-on views use repetition
+1 by default; `selection.json` identifies each choice. This illustrates the
+specified scenarios and does not replace analysis of all repetitions.
 
 ## Group handoff
 
@@ -231,5 +248,6 @@ This creates `dist/lab-YOUR_GROUP_ID-phase4.zip`, including source, corpus,
 example configuration, documentation and Phase 4 evidence. `.git`, `.venv`,
 real `.env` files and private working notes are excluded. A SHA-256 manifest
 records the package contents. Existing archives are not overwritten.
-The code review PR stays a draft until Docker evidence and the group report
-integration are reviewed; it is not automatically merged.
+Review the recorded evidence and group-report integration together before
+pushing changes or creating a new PR. Publication is deliberately deferred;
+no automatic merge is performed.
