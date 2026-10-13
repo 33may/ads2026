@@ -6,10 +6,10 @@ config:
 ---
 flowchart LR
   client@{ icon: "lucide:user", form: "rounded", label: "Client · end user", pos: "b", h: 56 }
-  dev@{ icon: "lucide:terminal", form: "rounded", label: "Developer client", pos: "b", h: 56 }
+  dev@{ icon: "lucide:terminal", form: "rounded", label: "Admin · developer client", pos: "b", h: 56 }
   subgraph server["<b>Logical server</b> (hostname:port)"]
     direction LR
-    wc["<b>Word-count service</b><br/>RPyC · counts keywords<br/><i>Client API · Developer API</i>"]
+    wc["<b>Word-count service</b><br/>RPyC API · counting engine<br/><i>Client API · Developer API</i>"]
     redis[("<b>Cache</b><br/>Redis · results, hot keywords")]
     fs[("<b>File store</b><br/>S3-like · texts")]
     wc <-->|"C2 · Redis protocol"| redis

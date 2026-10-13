@@ -1,0 +1,40 @@
+---
+config:
+  theme: base
+  themeVariables: { fontFamily: Helvetica, fontSize: 14px, edgeLabelBackground: '#ffffff' }
+  flowchart: { curve: basis, nodeSpacing: 30, rankSpacing: 70 }
+---
+flowchart LR
+  client@{ icon: "lucide:user", form: "rounded", label: "Client · end user", pos: "b", h: 56 }
+  dev@{ icon: "lucide:terminal", form: "rounded", label: "Admin · developer client", pos: "b", h: 56 }
+  subgraph server["<b>Logical server</b> (hostname:port)"]
+    direction LR
+    lb["<b>Load balancer</b><br/>TCP proxy · least connections / least response time<br/><i>health monitor · PING/PONG</i>"]
+    subgraph replicas["<b>×3 replicas</b> (server-1 .. server-3)"]
+      direction LR
+      wc["<b>Word-count service</b><br/>RPyC API · counting engine<br/><i>Client API · Developer API</i>"]
+      wc2["server-2 · identical"]
+      wc3["server-3 · identical"]
+    end
+    redis[("<b>Cache</b><br/>Redis · results, hot keywords")]
+    fs[("<b>File store</b><br/>S3-like · texts")]
+    lb <-->|"C5 · TCP byte stream (forwarded RPyC)<br/>to the selected replica"| replicas
+    lb -.->|"C6 · health check"| replicas
+    wc <-->|"C2 · Redis protocol"| redis
+    wc <-->|"C3 · HTTP"| fs
+  end
+  client <-.->|"C1 · RPyC (RPC)"| lb
+  dev <-.->|"C4 · RPyC (RPC)"| lb
+  classDef svc fill:#D6E8F7,stroke:#4F86B8,rx:8,ry:8
+  classDef ghost fill:#EDF3F9,stroke:#9DB8D2,color:#6A7F94,stroke-dasharray:4 3,rx:8,ry:8
+  classDef lbc fill:#FBE7D0,stroke:#D08A3C,rx:8,ry:8
+  classDef store fill:#E4EFDB,stroke:#6E9F4A
+  class wc svc
+  class wc2,wc3 ghost
+  class lb lbc
+  class redis,fs store
+  linkStyle 1 stroke:#C0392B,stroke-dasharray:5 4
+  style server fill:#F7F5F1,stroke:#B0B0B0,rx:12,ry:12
+  style replicas fill:#F0F4F8,stroke:#9DB8D2,stroke-dasharray:6 4,rx:10,ry:10
+  style client fill:#F3F0EB,stroke:#9A9A9A
+  style dev fill:#F3F0EB,stroke:#9A9A9A

@@ -1,8 +1,9 @@
 """Build assignment-ready latency, reliability, and distribution reports.
 
-Latency figures use ``rpc_ms``: the client-side time from sending ``get_count``
-until its response arrives. Connection setup remains in the raw CSV as
-``conn_ms`` but is not part of the assignment's execution-latency metric.
+Latency figures use ``total_ms``: the client-side time from opening the
+connection until the ``get_count`` response arrives (``conn_ms`` + ``rpc_ms``).
+Every request is a fresh client, so waiting in the server's accept queue under
+overload is part of the latency a user sees; ``rpc_ms`` alone stays flat.
 """
 
 import csv
@@ -43,6 +44,14 @@ MODEL_CACHE_COLORS = {
     ("combined-lc-lrt", "off"): "#6A3D9A",
     ("combined-lc-lrt", "on"): "#E377C2",
 }
+# Phase 2 (one server): hue = cache (amber off, violet on), lightness =
+# warm-up 0 -> 100 -> 500 (light -> dark). Ramps checked with the dataviz
+# validator: monotone lightness, light end >= 2:1 on white, all pairs
+# separable under colour-vision deficiency. Line style repeats the warm-up.
+DIRECT_COLORS = {
+    ("off", "0"): "#d99a00", ("off", "100"): "#a86a00", ("off", "500"): "#6b4200",
+    ("on", "0"): "#a99cf0", ("on", "100"): "#6250d6", ("on", "500"): "#33248f",
+}
 WARMUP_LINESTYLES = {
     "0": "-",
     "100": "--",
@@ -72,6 +81,36 @@ def _metric(function, values):
     return function(values) if values else float("nan")
 
 
+def _curve_max(data, stat, labels=None):
+    """Largest plotted point, so paired avg/p99 figures share one y-range."""
+    best = 0.0
+    for label in labels or data:
+        for rate in data.get(label, {}):
+            per_run = [
+                _metric(stat, run["latencies"])
+                for run in data[label][rate]
+                if run["latencies"]
+            ]
+            if per_run:
+                best = max(best, statistics.mean(per_run))
+    return best
+
+
+def _curve_min(data, stat, labels=None):
+    """Smallest plotted point (lower bound for a shared log y-range)."""
+    best = float("inf")
+    for label in labels or data:
+        for rate in data.get(label, {}):
+            per_run = [
+                _metric(stat, run["latencies"])
+                for run in data[label][rate]
+                if run["latencies"]
+            ]
+            if per_run:
+                best = min(best, statistics.mean(per_run))
+    return best if best != float("inf") else None
+
+
 def _series_style(label):
     """Return a stable visual identity for one model and test condition."""
     model = "direct"
@@ -86,7 +125,11 @@ def _series_style(label):
     warmup = condition.rsplit("warm", 1)[-1]
     return {
         **MODEL_STYLES[model],
-        "color": MODEL_CACHE_COLORS[(model, cache)],
+        "color": (
+            DIRECT_COLORS[(cache, warmup)]
+            if model == "direct" and (cache, warmup) in DIRECT_COLORS
+            else MODEL_CACHE_COLORS[(model, cache)]
+        ),
         "linestyle": WARMUP_LINESTYLES.get(warmup, "-"),
         "linewidth": 2,
     }
@@ -105,9 +148,9 @@ def load(directory):
         rate = float(rows[0]["rate"])
         successful = [row for row in rows if row["ok"] == "1"]
         latencies = sorted(
-            float(row["rpc_ms"])
+            float(row["total_ms"])
             for row in successful
-            if row.get("rpc_ms") not in (None, "", "nan")
+            if row.get("total_ms") not in (None, "", "nan")
         )
         connections = {
             server: [
@@ -155,9 +198,9 @@ def load(directory):
 
 def figure(
     data, stat, ylabel, output, log=False, labels=None,
-    display_labels=None, title=None,
+    display_labels=None, title=None, ymax=None, ymin=None,
 ):
-    fig, axis = plt.subplots(figsize=(8, 3.8))
+    fig, axis = plt.subplots(figsize=(6, 4.2))
     labels = labels or sorted(
         data, key=lambda label: (ORDER.index(label) if label in ORDER else 99, label)
     )
@@ -174,20 +217,34 @@ def figure(
                 if run["latencies"]
             ]
             values.append(statistics.mean(per_run) if per_run else float("nan"))
+        default_name = label
+        if label in CONDITIONS:
+            cache_state, warm = label[len("cache-"):].split("-warm")
+            default_name = f"cache {cache_state}, warm-up {warm}"
         axis.plot(
             rates, values,
-            label=(display_labels or {}).get(label, label),
+            label=(display_labels or {}).get(label, default_name),
             **_series_style(label),
         )
         plotted = True
+    axis.axhline(
+        100, color="#6b6b6b", linestyle=(0, (4, 3)), linewidth=1,
+        label="NFR1 (100 ms)", zorder=1,
+    )
     axis.set_xlabel("offered keyword requests per second")
     axis.set_ylabel(ylabel)
     if title:
         axis.set_title(title)
     if log:
         axis.set_yscale("log")
+        if ymax is not None and ymin:
+            axis.set_ylim(ymin * 0.8, ymax * 1.25)
+    elif ymax is not None:
+        axis.set_ylim(-ymax * 0.02, ymax * 1.05)
     axis.grid(alpha=0.3, which="both")
-    if plotted:
+    if plotted and len(labels) <= 7:
+        axis.legend(loc="upper left", fontsize=9, frameon=False)
+    elif plotted:
         axis.legend(loc="center left", bbox_to_anchor=(1.02, 0.5))
     fig.tight_layout()
     fig.savefig(output, dpi=200, bbox_inches="tight")
@@ -281,8 +338,8 @@ def _run_row(label, rate, run):
 
 RUN_HEADER = [
     "label", "rate", "run", "attempted", "successful", "failed",
-    "success_pct", "achieved_success_rps", "avg_rpc_ms", "p50_rpc_ms",
-    "p99_rpc_ms", "server_1_selections", "server_2_selections",
+    "success_pct", "achieved_success_rps", "avg_latency_ms", "p50_latency_ms",
+    "p99_latency_ms", "server_1_selections", "server_2_selections",
     "server_3_selections", "server_1_share_pct", "server_2_share_pct",
     "server_3_share_pct", "avg_server_1_connections",
     "avg_server_2_connections", "avg_server_3_connections",
@@ -347,7 +404,7 @@ def write_reports(data, directory):
 
     summary_header = RUN_HEADER[:-1]
     summary_header[2] = "runs"
-    summary_header.insert(9, "avg_rpc_stddev_ms")
+    summary_header.insert(9, "avg_latency_stddev_ms")
     with open(os.path.join(directory, "runs.tsv"), "w", newline="") as stream:
         writer = csv.writer(stream, delimiter="\t", lineterminator="\n")
         writer.writerow(RUN_HEADER)
@@ -381,17 +438,18 @@ def comparison_figures(data, directory):
             for policy, description in PHASE3_POLICIES
         })
         title = condition.replace("-", " ")
+        shared = _curve_max(data, p99, labels)
         figure(
             data, statistics.mean,
-            "average successful-request RPC latency (ms)",
+            "average successful-request latency (ms)",
             os.path.join(directory, f"comparison-{condition}-avg.png"),
-            labels=labels, display_labels=display, title=title,
+            labels=labels, display_labels=display, title=title, ymax=shared,
         )
         figure(
             data, p99,
-            "99th-percentile successful-request RPC latency (ms)",
+            "99th-percentile successful-request latency (ms)",
             os.path.join(directory, f"comparison-{condition}-p99.png"),
-            labels=labels, display_labels=display, title=title,
+            labels=labels, display_labels=display, title=title, ymax=shared,
         )
 
 
@@ -399,25 +457,28 @@ def main(directory):
     data = load(directory)
     if not data:
         raise SystemExit(f"no CSVs in {directory}")
+    shared = _curve_max(data, p99)
     figure(
         data, statistics.mean,
-        "average successful-request RPC latency (ms)",
-        os.path.join(directory, "avg.png"),
+        "average successful-request latency (ms)",
+        os.path.join(directory, "avg.png"), ymax=shared,
     )
     figure(
         data, p99,
-        "99th-percentile successful-request RPC latency (ms)",
-        os.path.join(directory, "p99.png"),
+        "99th-percentile successful-request latency (ms)",
+        os.path.join(directory, "p99.png"), ymax=shared,
     )
     figure(
         data, statistics.mean,
-        "average successful-request RPC latency (ms, log)",
+        "average successful-request latency (ms, log)",
         os.path.join(directory, "avg-log.png"), log=True,
+        ymax=shared, ymin=_curve_min(data, statistics.mean),
     )
     figure(
         data, p99,
-        "99th-percentile successful-request RPC latency (ms, log)",
+        "99th-percentile successful-request latency (ms, log)",
         os.path.join(directory, "p99-log.png"), log=True,
+        ymax=shared, ymin=_curve_min(data, statistics.mean),
     )
     operational_figure(
         data,
