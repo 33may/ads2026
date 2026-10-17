@@ -5,6 +5,9 @@ CLIENT  := docker exec ads-client python
 
 CACHE ?= on         # cache for the servers: on | off
 ALGORITHM ?= least-connections # least-connections | lrt | combined
+FT ?= off
+PYTHON ?= $(if $(wildcard .venv/bin/python),./.venv/bin/python,python3)
+EXPERIMENT_PYTHON ?= ./.venv/bin/python
 SVC  ?= server-1
 N    ?= 10
 RESULTS_DIR ?= results/Phase2+3/controlled/warmup-0-100-500
@@ -16,7 +19,7 @@ up:                 ## scenario 1: redis, minio, server-1
 	@CACHE=$(CACHE) $(SINGLE) up -d --build --wait
 
 up-cluster:         ## scenario 2: redis, minio, server-1..3, lb
-	@CACHE=$(CACHE) LB_ALGORITHM=$(ALGORITHM) $(CLUSTER) up -d --build --wait
+	@CACHE=$(CACHE) LB_ALGORITHM=$(ALGORITHM) FAULT_TOLERANCE=$(FT) $(CLUSTER) up -d --build --wait
 
 down:               ## stop whichever scenario is running
 	@$(SINGLE) down --remove-orphans
@@ -56,3 +59,24 @@ plot-results:       ## rebuild all combined Phase 2+3 tables and figures from sa
 
 test-phase3:         ## fast policy and transparent TCP-proxy regression tests
 	@MPLCONFIGDIR=/tmp/matplotlib ./.venv/bin/python -m unittest -v tests.test_phase3 tests.test_cache
+
+.PHONY: replica-stop replica-start health test-phase4 experiment-phase4 package-phase4
+replica-stop:
+	@case "$(N)" in 1|2|3) ;; *) echo "Use N=1, N=2 or N=3"; exit 2;; esac
+	@$(CLUSTER) stop server-$(N)
+
+replica-start:
+	@case "$(N)" in 1|2|3) ;; *) echo "Use N=1, N=2 or N=3"; exit 2;; esac
+	@$(CLUSTER) start server-$(N)
+
+health:
+	@docker exec -i lb python - < experiments/health_status.py
+
+test-phase4:
+	@PYTHONDONTWRITEBYTECODE=1 $(PYTHON) -m unittest discover -s tests -p 'test_phase4*.py' -v
+
+experiment-phase4:
+	@MPLCONFIGDIR=/tmp/matplotlib $(EXPERIMENT_PYTHON) experiments/phase4.py $(ARGS)
+
+package-phase4:
+	@$(PYTHON) experiments/package_phase4.py --group-id "$(GROUP_ID)"

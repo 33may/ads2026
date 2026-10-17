@@ -5,6 +5,7 @@ import rpyc
 from rpyc.utils.server import ThreadedServer
 
 from cache import Cache
+from health import HealthServer
 from log import logger, SERVER_NAME
 from store import Store
 
@@ -92,8 +93,23 @@ if __name__ == "__main__":
         cache.pool_timeout,
         PORT,
     )
-    ThreadedServer(
+    rpc_server = ThreadedServer(
         WordCountService,
         port=PORT,
         protocol_config={"allow_public_attrs": True},
-    ).start()
+    )
+    health_server = None
+    try:
+        if os.environ.get("FAULT_TOLERANCE", "off") == "on":
+            health_server = HealthServer(
+                port=int(os.environ.get("SERVER_HEALTH_PORT", "18862")),
+                is_ready=lambda: rpc_server.active,
+                request_timeout=float(os.environ.get("HEALTH_TIMEOUT", "0.5")),
+            )
+            health_server.start()
+            logger.info("PING/PONG health listener on :{}", health_server.address[1])
+        rpc_server.start()
+    finally:
+        rpc_server.close()
+        if health_server is not None:
+            health_server.close()

@@ -1,4 +1,4 @@
-# Scenario 2 (Phase 3): three word-count servers behind a load balancer on localhost:${SERVER_PORT}.
+# Scenario 2 (Phases 3/4): three replicas behind a balancer on localhost:${SERVER_PORT}.
 # Self-contained: never combined with compose.yml. `make down` before switching scenarios.
 name: ads
 
@@ -15,6 +15,9 @@ x-server: &server            # one definition, three replicas; only SERVER_NAME 
     REDIS_MAX_CONNECTIONS: ${REDIS_MAX_CONNECTIONS:-64}
     REDIS_POOL_TIMEOUT: ${REDIS_POOL_TIMEOUT:-5}
     CACHE: ${CACHE:-on}
+    FAULT_TOLERANCE: ${FAULT_TOLERANCE:-off}
+    SERVER_HEALTH_PORT: ${SERVER_HEALTH_PORT:-18862}
+    HEALTH_TIMEOUT: ${HEALTH_TIMEOUT:-0.5}
   depends_on:
     redis:
       condition: service_healthy
@@ -91,6 +94,13 @@ services:
     environment:
       SERVER_PORT: ${SERVER_PORT}
       LB_METRICS_PORT: ${LB_METRICS_PORT:-18860}
+      FAULT_TOLERANCE: ${FAULT_TOLERANCE:-off}
+      SERVER_HEALTH_PORT: ${SERVER_HEALTH_PORT:-18862}
+      HEALTH_INTERVAL: ${HEALTH_INTERVAL:-1}
+      HEALTH_TIMEOUT: ${HEALTH_TIMEOUT:-0.5}
+      HEALTH_FALL: ${HEALTH_FALL:-2}
+      HEALTH_RISE: ${HEALTH_RISE:-2}
+      BACKEND_CONNECT_TIMEOUT: ${BACKEND_CONNECT_TIMEOUT:-0.5}
       BACKENDS: server-1:${SERVER_PORT},server-2:${SERVER_PORT},server-3:${SERVER_PORT}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
