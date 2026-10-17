@@ -1,0 +1,5 @@
+policy,ft,runs,requests,failures,failure_percent,errors_per_run,observed_detection_s_range,observed_recovery_s_range,returned_target_successes
+least-connections,off,3,3600,279,7.75,139/139/1,,,278
+least-connections,on,3,3600,0,0.0,0/0/0,0.333–0.336,3.020–3.041,356
+lrt,off,3,3600,443,12.305555555555555,0/198/245,,,363
+lrt,on,3,3600,0,0.0,0/0/0,0.336–2.994,3.016–3.030,396

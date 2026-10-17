@@ -1,0 +1,473 @@
+{
+  "status": "pass",
+  "source_session": "results/phase4/matrix-20261007",
+  "expected_runs": 12,
+  "reviewed_runs": 12,
+  "image_ids": {
+    "lb": "sha256:a491a39a2688287287ec896032bd20a54ab3114ab0918143c11188e610a867d2",
+    "ads-client": "sha256:fa122d7c4c7ef50365bcc6e3e97db77255ba5b0f2b6eb6bfcd1a98a1c897d7bd",
+    "ads-minio": "sha256:69b55a1c1c5dc285ce04db96689f5b2102317fc77a50680a1874ca6efd1c87f9",
+    "server-1": "sha256:4bac34b36faf43ed2028d7d0ad4fd0f319fa914b66652b4be4e54e782b9ffe11",
+    "server-3": "sha256:4bac34b36faf43ed2028d7d0ad4fd0f319fa914b66652b4be4e54e782b9ffe11",
+    "server-2": "sha256:4bac34b36faf43ed2028d7d0ad4fd0f319fa914b66652b4be4e54e782b9ffe11",
+    "ads-redis": "sha256:4fa24486b8bcca8eec45ee0eb166edc674795e53a2b53d1a9ef263eecebaac85"
+  },
+  "checks": "All request IDs, answers, attempt joins, counts, phase totals, lifecycle events and timing calculations; no reruns omitted.",
+  "findings": [],
+  "runs": [
+    {
+      "run": "least-connections-ft-off-r1",
+      "requests": 1200,
+      "failures": 139,
+      "error_types": {
+        "EOFError": 139
+      },
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8609678745269775,
+      "max_schedule_lag_ms": 9.285211563110352,
+      "p95_latency_ms": 20.13425002223812,
+      "observed_detection_s": null,
+      "observed_recovery_s": null,
+      "kill_command_s": 0.20206379890441895,
+      "restart_command_s": 0.7553439140319824,
+      "target": "server-2",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [],
+      "longest_backend_connect_s": 0.01935577392578125,
+      "returned_target_successes": 126,
+      "retry_requests": 0
+    },
+    {
+      "run": "least-connections-ft-off-r2",
+      "requests": 1200,
+      "failures": 139,
+      "error_types": {
+        "EOFError": 139
+      },
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8516371250152588,
+      "max_schedule_lag_ms": 9.155988693237305,
+      "p95_latency_ms": 20.293875015340745,
+      "observed_detection_s": null,
+      "observed_recovery_s": null,
+      "kill_command_s": 0.1989297866821289,
+      "restart_command_s": 0.7318792343139648,
+      "target": "server-2",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [],
+      "longest_backend_connect_s": 0.10356950759887695,
+      "returned_target_successes": 127,
+      "retry_requests": 0
+    },
+    {
+      "run": "least-connections-ft-off-r3",
+      "requests": 1200,
+      "failures": 1,
+      "error_types": {
+        "TimeoutError": 1
+      },
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8481981754302979,
+      "max_schedule_lag_ms": 11.69276237487793,
+      "p95_latency_ms": 18.847166997147724,
+      "observed_detection_s": null,
+      "observed_recovery_s": null,
+      "kill_command_s": 0.23206496238708496,
+      "restart_command_s": 0.7400848865509033,
+      "target": "server-3",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [],
+      "longest_backend_connect_s": 36.053266525268555,
+      "returned_target_successes": 25,
+      "retry_requests": 0
+    },
+    {
+      "run": "least-connections-ft-on-r1",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 59,
+      "max_sample_gap_s": 1.8789701461791992,
+      "max_schedule_lag_ms": 10.938167572021484,
+      "p95_latency_ms": 18.930874997749925,
+      "observed_detection_s": 0.3363778591156006,
+      "observed_recovery_s": 3.0413990020751953,
+      "kill_command_s": 0.20994019508361816,
+      "restart_command_s": 0.7599179744720459,
+      "target": "server-1",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [
+        "connect: gaierror"
+      ],
+      "longest_backend_connect_s": 0.05814361572265625,
+      "returned_target_successes": 119,
+      "retry_requests": 1
+    },
+    {
+      "run": "least-connections-ft-on-r2",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8624770641326904,
+      "max_schedule_lag_ms": 14.24717903137207,
+      "p95_latency_ms": 19.07554201898165,
+      "observed_detection_s": 0.3349471092224121,
+      "observed_recovery_s": 3.0199413299560547,
+      "kill_command_s": 0.21221613883972168,
+      "restart_command_s": 0.7588260173797607,
+      "target": "server-1",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [
+        "connect: gaierror"
+      ],
+      "longest_backend_connect_s": 0.01840043067932129,
+      "returned_target_successes": 119,
+      "retry_requests": 1
+    },
+    {
+      "run": "least-connections-ft-on-r3",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 60,
+      "max_sample_gap_s": 1.844221830368042,
+      "max_schedule_lag_ms": 36.38887405395508,
+      "p95_latency_ms": 19.06041699112393,
+      "observed_detection_s": 0.33257031440734863,
+      "observed_recovery_s": 3.0366880893707275,
+      "kill_command_s": 0.21109318733215332,
+      "restart_command_s": 0.7366440296173096,
+      "target": "server-1",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [
+        "connect: gaierror"
+      ],
+      "longest_backend_connect_s": 0.016889333724975586,
+      "returned_target_successes": 118,
+      "retry_requests": 1
+    },
+    {
+      "run": "lrt-ft-off-r1",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8723483085632324,
+      "max_schedule_lag_ms": 8.897781372070312,
+      "p95_latency_ms": 18.644041992956772,
+      "observed_detection_s": null,
+      "observed_recovery_s": null,
+      "kill_command_s": 0.245438814163208,
+      "restart_command_s": 0.758976936340332,
+      "target": "server-2",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [],
+      "longest_backend_connect_s": 0.013831615447998047,
+      "returned_target_successes": 200,
+      "retry_requests": 0
+    },
+    {
+      "run": "lrt-ft-off-r2",
+      "requests": 1200,
+      "failures": 198,
+      "error_types": {
+        "EOFError": 198
+      },
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8380069732666016,
+      "max_schedule_lag_ms": 6.896018981933594,
+      "p95_latency_ms": 18.086207972373813,
+      "observed_detection_s": null,
+      "observed_recovery_s": null,
+      "kill_command_s": 0.21086573600769043,
+      "restart_command_s": 0.7249116897583008,
+      "target": "server-2",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [],
+      "longest_backend_connect_s": 0.01733231544494629,
+      "returned_target_successes": 82,
+      "retry_requests": 0
+    },
+    {
+      "run": "lrt-ft-off-r3",
+      "requests": 1200,
+      "failures": 245,
+      "error_types": {
+        "EOFError": 245
+      },
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8488352298736572,
+      "max_schedule_lag_ms": 8.98599624633789,
+      "p95_latency_ms": 18.94874998833984,
+      "observed_detection_s": null,
+      "observed_recovery_s": null,
+      "kill_command_s": 0.2354428768157959,
+      "restart_command_s": 0.7408950328826904,
+      "target": "server-2",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [],
+      "longest_backend_connect_s": 1.0315372943878174,
+      "returned_target_successes": 81,
+      "retry_requests": 0
+    },
+    {
+      "run": "lrt-ft-on-r1",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8714179992675781,
+      "max_schedule_lag_ms": 8.118867874145508,
+      "p95_latency_ms": 18.063416006043553,
+      "observed_detection_s": 0.3361032009124756,
+      "observed_recovery_s": 3.0296339988708496,
+      "kill_command_s": 0.21660304069519043,
+      "restart_command_s": 0.7557308673858643,
+      "target": "server-2",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [
+        "connect: ConnectionRefusedError"
+      ],
+      "longest_backend_connect_s": 0.015279293060302734,
+      "returned_target_successes": 161,
+      "retry_requests": 1
+    },
+    {
+      "run": "lrt-ft-on-r2",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 60,
+      "max_sample_gap_s": 1.8540890216827393,
+      "max_schedule_lag_ms": 12.809991836547852,
+      "p95_latency_ms": 18.160083011025563,
+      "observed_detection_s": 0.36925482749938965,
+      "observed_recovery_s": 3.0227270126342773,
+      "kill_command_s": 0.22240781784057617,
+      "restart_command_s": 0.7416000366210938,
+      "target": "server-3",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [
+        "connect: ConnectionRefusedError"
+      ],
+      "longest_backend_connect_s": 0.01855635643005371,
+      "returned_target_successes": 113,
+      "retry_requests": 1
+    },
+    {
+      "run": "lrt-ft-on-r3",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 60,
+      "max_sample_gap_s": 1.819561243057251,
+      "max_schedule_lag_ms": 10.404109954833984,
+      "p95_latency_ms": 17.46937501593493,
+      "observed_detection_s": 2.9935057163238525,
+      "observed_recovery_s": 3.01583194732666,
+      "kill_command_s": 0.22797369956970215,
+      "restart_command_s": 0.707244873046875,
+      "target": "server-3",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "detection_reasons": [
+        "gaierror"
+      ],
+      "longest_backend_connect_s": 0.02182173728942871,
+      "returned_target_successes": 122,
+      "retry_requests": 0
+    }
+  ]
+}

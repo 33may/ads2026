@@ -1,0 +1,23 @@
+{
+  "policy": "least-connections",
+  "ft": "off",
+  "repetition": 1,
+  "epoch": 1791324987.965108,
+  "target": "server-2",
+  "stage_seconds": 20,
+  "rate": 20,
+  "complete": true,
+  "expected_requests": 1200,
+  "recorded_requests": 1200,
+  "sample_interval_s": 1,
+  "health_config": {
+    "enabled": false,
+    "port": 18862,
+    "interval": 1.0,
+    "timeout": 0.5,
+    "fall": 2,
+    "rise": 2,
+    "connect_timeout": 0.5
+  },
+  "producer_errors": []
+}

@@ -1,0 +1,44 @@
+{
+  "status": "pass",
+  "source_session": "results/phase4/practice-20261007",
+  "expected_runs": 1,
+  "reviewed_runs": 1,
+  "checks": "All request IDs, answers, attempt joins, counts, phase totals, lifecycle events and timing calculations; no reruns omitted.",
+  "findings": [],
+  "runs": [
+    {
+      "run": "least-connections-ft-on-r1",
+      "requests": 1200,
+      "failures": 0,
+      "error_types": {},
+      "sample_count": 60,
+      "max_sample_gap_s": 1.81343412399292,
+      "max_schedule_lag_ms": 11.308908462524414,
+      "p95_latency_ms": 19.682540994836017,
+      "observed_detection_s": 0.9977779388427734,
+      "observed_recovery_s": 3.0359532833099365,
+      "kill_command_s": 0.19591403007507324,
+      "restart_command_s": 0.7123832702636719,
+      "target": "server-3",
+      "target_statuses": [
+        {
+          "label": "ready",
+          "state": "running",
+          "exit_code": 0
+        },
+        {
+          "label": "failed",
+          "state": "exited",
+          "exit_code": 137
+        },
+        {
+          "label": "final",
+          "state": "running",
+          "exit_code": 0
+        }
+      ],
+      "returned_target_successes": 117,
+      "retry_requests": 1
+    }
+  ]
+}

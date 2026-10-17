@@ -1,0 +1,117 @@
+Computer name and shell prompt removed; spacing normalized.
+
+$ make health
+Algorithm: least-response-time | Fault tolerance: True
+SERVER       HEALTH      ACTIVE  ATTEMPTS   OK/FAIL  LAST ERROR
+server-1     healthy          0         0       9/0  -
+server-2     healthy          0         0       9/0  -
+server-3     healthy          0         0       9/0  -
+health: server-2 unknown -> healthy (ping/pong)
+health: server-1 unknown -> healthy (ping/pong)
+health: server-3 unknown -> healthy (ping/pong)
+
+$ for i in {1..6}; do
+  make query K=the REF=mansfield-park
+done
+6208  (2.6 ms)
+6208  (2.7 ms)
+6208  (2.7 ms)
+6208  (1.0 ms)
+6208  (1.0 ms)
+6208  (1.0 ms)
+
+$ make health
+Algorithm: least-response-time | Fault tolerance: True
+SERVER       HEALTH      ACTIVE  ATTEMPTS   OK/FAIL  LAST ERROR
+server-1     healthy          0         4      24/0  -
+server-2     healthy          0         1      24/0  -
+server-3     healthy          0         1      24/0  -
+health: server-2 unknown -> healthy (ping/pong)
+health: server-1 unknown -> healthy (ping/pong)
+health: server-3 unknown -> healthy (ping/pong)
+
+$ make replica-stop N=1
+[+] Stopping 1/1
+✔ Container server-1 Stopped 10.1s
+
+$ make health
+Algorithm: least-response-time | Fault tolerance: True
+SERVER       HEALTH      ACTIVE  ATTEMPTS   OK/FAIL  LAST ERROR
+server-1     unhealthy        0         4      0/10  gaierror
+server-2     healthy          0         1     117/0  -
+server-3     healthy          0         1     117/0  -
+health: server-2 unknown -> healthy (ping/pong)
+health: server-1 unknown -> healthy (ping/pong)
+health: server-3 unknown -> healthy (ping/pong)
+health: server-1 healthy -> unhealthy (gaierror)
+
+$ for i in {1..6}; do
+  make query K=the REF=mansfield-park
+done
+6208  (1.2 ms)
+6208  (1.0 ms)
+6208  (1.0 ms)
+6208  (1.2 ms)
+6208  (0.9 ms)
+6208  (1.0 ms)
+
+$ make health
+Algorithm: least-response-time | Fault tolerance: True
+SERVER       HEALTH      ACTIVE  ATTEMPTS   OK/FAIL  LAST ERROR
+server-1     unhealthy        0         4      0/25  gaierror
+server-2     healthy          0         7     132/0  -
+server-3     healthy          0         1     132/0  -
+health: server-2 unknown -> healthy (ping/pong)
+health: server-1 unknown -> healthy (ping/pong)
+health: server-3 unknown -> healthy (ping/pong)
+health: server-1 healthy -> unhealthy (gaierror)
+
+$ make replica-start N=1
+[+] Running 3/3
+✔ Container ads-minio Healthy 0.5s
+✔ Container ads-redis Healthy 0.5s
+✔ Container server-1 Started 0.1s
+
+$ make health
+Algorithm: least-response-time | Fault tolerance: True
+SERVER       HEALTH      ACTIVE  ATTEMPTS   OK/FAIL  LAST ERROR
+server-1     healthy          0         4       7/0  -
+server-2     healthy          0         7     208/0  -
+server-3     healthy          0         1     208/0  -
+health: server-2 unknown -> healthy (ping/pong)
+health: server-1 unknown -> healthy (ping/pong)
+health: server-3 unknown -> healthy (ping/pong)
+health: server-1 healthy -> unhealthy (gaierror)
+health: server-1 unhealthy -> healthy (ping/pong)
+
+$ for i in {1..6}; do
+  make query K=the REF=mansfield-park
+done
+6208  (2.7 ms)
+6208  (1.0 ms)
+6208  (1.0 ms)
+6208  (1.0 ms)
+6208  (1.0 ms)
+6208  (1.0 ms)
+
+$ make health
+Algorithm: least-response-time | Fault tolerance: True
+SERVER       HEALTH      ACTIVE  ATTEMPTS   OK/FAIL  LAST ERROR
+server-1     healthy          0         5      24/0  -
+server-2     healthy          0        12     225/0  -
+server-3     healthy          0         1     225/0  -
+health: server-2 unknown -> healthy (ping/pong)
+health: server-1 unknown -> healthy (ping/pong)
+health: server-3 unknown -> healthy (ping/pong)
+health: server-1 healthy -> unhealthy (gaierror)
+health: server-1 unhealthy -> healthy (ping/pong)
+
+$ docker compose -f compose.cluster.yml logs --tail=8 server-1
+server-1 | 21:53:19.596 | INFO | server-1 | PING/PONG health listener on :18862
+server-1 | 21:53:38.278 | INFO | server-1 | get_count('the', 'mansfield-park') = 6208 hit
+server-1 | 21:53:38.604 | INFO | server-1 | get_count('the', 'mansfield-park') = 6208 hit
+server-1 | 21:53:38.711 | INFO | server-1 | get_count('the', 'mansfield-park') = 6208 hit
+server-1 | 21:53:38.817 | INFO | server-1 | get_count('the', 'mansfield-park') = 6208 hit
+server-1 | 21:56:40.852 | INFO | server-1 | cache on | redis blocking pool max_connections=64 timeout=5.0s | listening on :18861
+server-1 | 21:56:40.852 | INFO | server-1 | PING/PONG health listener on :18862
+server-1 | 21:56:55.363 | INFO | server-1 | get_count('the', 'mansfield-park') = 6208 hit
