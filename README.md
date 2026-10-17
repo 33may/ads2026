@@ -2,6 +2,8 @@
 
 Architecture and interfaces: `docs/architecture.md`.
 
+Phase 4 setup, tests and experiments: [Phase 4 guide](docs/phase4.md).
+
 ## Setup
 
 The client, server, load balancer, Redis, and MinIO are all declared as Compose
