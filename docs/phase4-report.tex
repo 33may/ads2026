@@ -26,7 +26,7 @@ We evaluated LC and LRT with fault tolerance (FT) off/on, repeating each conditi
 \label{fig:phase4-failures}
 \end{figure*}
 
-All 7,200 FT-on queries returned 6208; no unhealthy replica was selected, and every recovered target served new queries. Five runs first excluded the target after a backend connection failure; one used periodic probes. All readmissions used PING/PONG. Live Docker evidence shows LC distributing requests across surviving replicas and LRT favouring a healthy replica; equal distribution is not required for LRT.
+All 7,200 FT-on queries returned 6208; no unhealthy replica was selected. After observed exclusion and before restart, 2,303 queries succeeded on surviving replicas; after restart, 752 correct replies came from the returned targets, with reuse in every run. Five runs first excluded the target after a backend connection failure; one used periodic probes. All readmissions used PING/PONG. Appendix Figs.~\ref{fig:phase4-lc-failure}--\ref{fig:phase4-lc-recovery} show LC failure/recovery; Figs.~\ref{fig:phase4-lrt-failure}--\ref{fig:phase4-lrt-recovery} show LRT failure/recovery. These separate live demonstrations show Docker status, healthy-server routing and recovered-server reuse; LRT does not require equal distribution.
 
 Baseline results varied: a pending connection incidentally steered LC away from a failed target in one run, while LRT's preferred replica changed before the fault in another. All repetitions are retained.
 
@@ -38,5 +38,10 @@ These results cover one replica failure under a cached, low-load workload. Probe
 \section{Conclusion}
 We developed a distributed word-count service using a client--server architecture with RPyC, Redis and MinIO. Caching reduced repeated computation, while replication reduced high-load latency in our experiments, with results depending on the routing policy. Phase~4 added health monitoring, exclusion and automatic readmission of failed replicas. Across the six FT-enabled runs, all 7,200 queries returned the correct result through normal operation, a single-replica outage and recovery. These results support the design under the tested conditions, but do not establish fault tolerance for the shared balancer, cache or object store. Future work should address these shared dependencies and evaluate heavier and more varied workloads.
 % END GROUP CONCLUSION
+
+% BEGIN PHASE 4 APPENDIX
+\newcommand{\phasefourshotdir}{../results/phase4/live-demo-2026-10-07/screenshots}
+\input{phase4-appendix}
+% END PHASE 4 APPENDIX
 
 \end{document}

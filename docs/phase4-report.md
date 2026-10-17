@@ -2,7 +2,7 @@
 
 [IEEE LaTeX section and standalone preview](phase4-report.tex).
 This file mirrors the Phase 4 section, conclusion and figure added to the shared
-Overleaf report. The Phase 4 body is approximately 350 words, excluding the figure
+Overleaf report. The Phase 4 body is approximately 380 words, excluding the figure
 caption; the group conclusion adds approximately 100 words.
 Detailed measurements are in [the experiment analysis](../results/phase4/matrix-20261007/analysis.md);
 live figures and captions are in [the screenshot guide](../results/phase4/live-demo-2026-10-07/README.md).
@@ -25,7 +25,7 @@ We evaluated LC and LRT with fault tolerance (FT) off/on, repeating each conditi
 
 *Query failures with FT off/on. Each bar represents one 60 s run with 1,200 queries, including normal operation, outage, recovery and their transitions. All three repetitions are shown; zero denotes an observed run without query failures.*
 
-All 7,200 FT-on queries returned 6208; no unhealthy replica was selected, and every recovered target served new queries. Five runs first excluded the target after a backend connection failure; one used periodic probes. All readmissions used PING/PONG. Live Docker evidence shows LC distributing requests across surviving replicas and LRT favouring a healthy replica; equal distribution is not required for LRT.
+All 7,200 FT-on queries returned 6208; no unhealthy replica was selected. After observed exclusion and before restart, 2,303 queries succeeded on surviving replicas; after restart, 752 correct replies came from the returned targets, with reuse in every run. Five runs first excluded the target after a backend connection failure; one used periodic probes. All readmissions used PING/PONG. The appendix figures show LC failure/recovery and LRT failure/recovery. These separate live demonstrations show Docker status, healthy-server routing and recovered-server reuse; LRT does not require equal distribution.
 
 Baseline results varied: a pending connection incidentally steered LC away from a failed target in one run, while LRT's preferred replica changed before the fault in another. All repetitions are retained.
 
@@ -41,7 +41,8 @@ We developed a distributed word-count service using a client–server architectu
 
 - Use the failure comparison in the Phase 4 section, spanning both columns. The vector [PDF](figures/phase4-failures.pdf) is intended for LaTeX; the PNG is a reading preview. It replaces the earlier table to avoid repeating the same results.
 - The figure is derived from [the recorded summary](../results/phase4/matrix-20261007/summary.csv). Recreate it from the repository root with `.venv/bin/python docs/figures/plot_phase4_failures.py`. The original experiment plots and measurements are unchanged.
-- Put the four genuine LC/LRT failure and recovery screenshots in the appendix, using the captions in the [screenshot guide](../results/phase4/live-demo-2026-10-07/README.md). Keep them readable; the LRT normal-operation screenshot is supplementary.
+- The [appendix source](phase4-appendix.tex) includes the four original LC/LRT failure/recovery screenshots with captions, one per page at full text width. The Phase 4 LaTeX text references all four figures. The LRT normal-operation screenshot remains supplementary; the failure caption identifies its recorded preparation counters.
+- Integrated into the shared project on 17 October 2026: `\input{phase4-appendix}` is immediately before `\end{document}`, after the existing appendix entries and bibliography command. The appendix file and four PNGs are at the project root. The existing main document is otherwise byte-for-byte unchanged. The new shared figures are 18–21; the standalone preview numbers them 2–5. The local preview supplies the repository screenshot directory without changing the PNGs.
 - The group conclusion follows Phase 4 and precedes the appendix. It is separate from the Phase 4 section.
 - Reconcile the shared report's Phase 3 numerical discussion with the selected experiment dataset before final submission. The conclusion currently avoids those disputed numerical values; its qualitative performance statement is supported by the 130 queries/s rows of [the latest local summary](../results/mac-2026-10-12/summary.tsv).
 - Check the three-page text limit against the complete group report. Figures and tables are excluded by the assignment, but must remain readable. This local preview does not establish the final shared report's length.

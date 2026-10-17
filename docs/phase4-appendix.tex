@@ -1,0 +1,39 @@
+% Append after the existing appendix figures; do not replace other contributions.
+% The shared Overleaf project keeps these four original PNGs beside this file.
+% The local preview overrides the directory below. No screenshot pixels are edited.
+\providecommand{\phasefourshotdir}{.}
+
+% Flush earlier figures so their order is retained. Each capture spans both
+% columns on its own page, preserving terminal text at a readable size.
+\clearpage
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{\phasefourshotdir/lc-ft-on-failure.png}
+\caption{Phase 4 live demonstration: Least Connections with fault tolerance enabled, after a replica failure. Docker reports server-2 as \texttt{Exited (137)} while server-1 and server-3 remain running. The balancer marks server-2 \texttt{unhealthy}; all six shown queries return the expected count of 6208. Cumulative connection attempts for server-1/2/3 are 4/0/3, showing traffic on the surviving replicas and none on the failed replica. These counters include preparation traffic; this separate demonstration is not part of the 14,400-query experiment.}
+\label{fig:phase4-lc-failure}
+\end{figure*}
+\clearpage
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{\phasefourshotdir/lc-ft-on-recovery.png}
+\caption{Phase 4 live demonstration: Least Connections after recovery. Docker shows all three replicas running, and the balancer records server-2's \texttt{unhealthy -> healthy (ping/pong)} transition. All six queries return 6208. Compared with Fig.~\ref{fig:phase4-lc-failure}, cumulative attempts rise from 4/0/3 to 6/2/5: each replica receives two new attempts. The two server-2 query log entries confirm that the restarted replica serves requests again.}
+\label{fig:phase4-lc-recovery}
+\end{figure*}
+\clearpage
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{\phasefourshotdir/lrt-ft-on-failure.png}
+\caption{Phase 4 live demonstration: Least Response Time with fault tolerance enabled, after a replica failure. Docker reports server-1 as \texttt{Exited (137)}; the balancer marks it \texttt{unhealthy}. All six queries return 6208. Cumulative attempts are 4/1/7, compared with 4/1/1 in the recorded preparation batch: the six new attempts go to healthy server-3 and the failed server receives none. LRT selects by response-time estimates and does not require equal traffic across healthy replicas. This separate demonstration is not part of the controlled experiment.}
+\label{fig:phase4-lrt-failure}
+\end{figure*}
+\clearpage
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{\phasefourshotdir/lrt-ft-on-recovery.png}
+\caption{Phase 4 live demonstration: Least Response Time after recovery. Docker shows all three replicas running, and the balancer records server-1's \texttt{unhealthy -> healthy (ping/pong)} transition. All six queries return 6208. Compared with Fig.~\ref{fig:phase4-lrt-failure}, cumulative attempts rise from 4/1/7 to 5/1/12: the returned server-1 receives one new attempt and server-3 receives five. The new server-1 query log entry confirms successful service after readmission; equal distribution is not required by LRT.}
+\label{fig:phase4-lrt-recovery}
+\end{figure*}
+\clearpage
